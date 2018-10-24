@@ -16,7 +16,7 @@ export const signup = (values, callback) => async dispatch => {
 
     if (response.status === 204) {
       dispatch({ type: AUTH_USER, payload: values.userId });
-      localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('userId', values.userId);
       callback();
     } else {
       dispatch({ type: AUTH_ERROR, payload: 'Error while creating user' });
@@ -25,4 +25,14 @@ export const signup = (values, callback) => async dispatch => {
   } catch (e) {
     dispatch({ type: AUTH_ERROR, payload: 'Email in use' });
   }
+};
+
+
+export const signout = () => {
+  localStorage.removeItem('userId');
+
+  return {
+    type: AUTH_USER,
+    payload: ''
+  };
 };

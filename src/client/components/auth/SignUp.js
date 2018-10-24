@@ -8,11 +8,14 @@ class SignUp extends Component {
   onSubmit(values) {
     this.props.signup(values, () => {
       this.props.history.push('/');
+      console.log("userid here:");
+      console.log(localStorage.getItem('userId'));
     });
   };
 
   render() {
     const { handleSubmit } = this.props;
+    console.log(this.props.authenticated);
 
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
@@ -42,9 +45,8 @@ class SignUp extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.auth);
   return {
-    authenticated: state.auth,
+    authenticated: state.auth.authenticated,
     errorMessage: state.auth.errorMessage
   };
 }
