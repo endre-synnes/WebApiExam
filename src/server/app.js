@@ -38,8 +38,6 @@ if(process.env.CORS){
 //to handle JSON payloads
 app.use(bodyParser.json());
 
-//to handle Form POST. "extended" is just to be able to parse all kinds of objects
-app.use(bodyParser.urlencoded({extended: true}));
 
 /*
     As we are going to use session-based authentication with
