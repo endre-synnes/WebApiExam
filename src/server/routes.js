@@ -44,7 +44,7 @@ router.post('/api/signup', function(req, res){
 });
 
 router.post('/api/logout', function(req, res){
-
+    console.log("in sign out");
     req.logout();
     res.status(204).send();
 });

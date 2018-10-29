@@ -23,11 +23,29 @@ export const signup = (values, callback) => async dispatch => {
 };
 
 
-export const signout = () => {
-  localStorage.removeItem('userId');
+export const signout = (values, callback) => async dispatch => {
 
-  return {
-    type: AUTH_USER,
-    payload: ''
-  };
+  try {
+    const response = await axios.post(
+      '/api/logout'
+    );
+
+    dispatch({ type: AUTH_USER, payload: null });
+    localStorage.removeItem('userId');
+    callback();
+
+    return {
+      type: AUTH_USER,
+      payload: ''
+    };
+
+  } catch (e) {
+
+    dispatch({ type: AUTH_ERROR, payload: 'Error while logging out' });
+
+    return {
+      type: AUTH_ERROR,
+      payload: 'Error while logging out'
+    };
+  }
 };
