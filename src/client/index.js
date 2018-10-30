@@ -10,6 +10,7 @@ import Welcome from "./components/Welcome";
 import App from "./components/App";
 import SignUp from './components/auth/SignUp';
 import SignOut from "./components/auth/SignOut";
+import NewGame from "./components/game/NewGame";
 
 const store = createStore(
   reducers,
@@ -26,6 +27,7 @@ ReactDOM.render(
         <Route path="/" exact component={Welcome}/>
         <Route path="/signup" exact component={SignUp}/>
         <Route path="/signout" exact component={SignOut}/>
+        <Route path="/new-game" exact component={NewGame}/>
       </App>
     </BrowserRouter>
   </Provider>

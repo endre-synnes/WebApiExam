@@ -60,15 +60,12 @@ router.get("/api/user", (req, res) => {
         and add it to the incoming "req" object
      */
 
-    if(req.user){
-        res.json({
-            userId: req.user.id,
-            balance: req.user.balance
-        });
-        return;
-    }
-
+  if(! req.user){
     res.status(401).send();
+    return;
+  }
+
+  res.status(200).json({userId: req.user.id});
 });
 
 

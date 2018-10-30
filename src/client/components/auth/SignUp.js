@@ -7,9 +7,7 @@ import { signup } from '../../actions';
 class SignUp extends Component {
   onSubmit(values) {
     this.props.signup(values, () => {
-      this.props.history.push('/');
-      console.log("userid here:");
-      console.log(localStorage.getItem('userId'));
+      this.props.history.push('/new-game');
     });
   };
 

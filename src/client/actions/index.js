@@ -18,7 +18,7 @@ export const signup = (values, callback) => async dispatch => {
     callback();
 
   } catch (e) {
-    dispatch({ type: AUTH_ERROR, payload: 'Email in use' });
+    dispatch({ type: AUTH_ERROR, payload: "Error while creating user" });
   }
 };
 
@@ -46,6 +46,26 @@ export const signout = (values, callback) => async dispatch => {
     return {
       type: AUTH_ERROR,
       payload: 'Error while logging out'
+    };
+  }
+};
+
+export const isAuthenticated = (values) => async dispatch => {
+  try {
+    const response = await axios.get(
+      '/api/user'
+    );
+
+    dispatch({ type: AUTH_USER, payload: response.data.userId });
+    localStorage.setItem('userId', response.data.userId);
+
+  } catch (e) {
+    localStorage.removeItem('userId');
+    dispatch({ type: AUTH_ERROR, payload: 'User Not Authenticated' });
+
+    return {
+      type: AUTH_ERROR,
+      payload: 'User Not Authenticated'
     };
   }
 };
