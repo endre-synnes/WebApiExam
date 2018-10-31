@@ -13,8 +13,8 @@ export const signup = (values, callback) => async dispatch => {
       dispatch({ type: AUTH_ERROR, payload: "Error while creating user, status code: "+response.status });
     }
 
-    dispatch({ type: AUTH_USER, payload: values.userId });
-    localStorage.setItem('userId', values.userId);
+    dispatch({ type: AUTH_USER, payload: values.username });
+    localStorage.setItem('username', values.username);
     callback();
 
   } catch (e) {
@@ -31,7 +31,7 @@ export const signout = (values, callback) => async dispatch => {
     );
 
     dispatch({ type: AUTH_USER, payload: null });
-    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
     callback();
 
     return {
@@ -56,11 +56,11 @@ export const isAuthenticated = (values) => async dispatch => {
       '/api/user'
     );
 
-    dispatch({ type: AUTH_USER, payload: response.data.userId });
-    localStorage.setItem('userId', response.data.userId);
+    dispatch({ type: AUTH_USER, payload: response.data.username });
+    localStorage.setItem('username', response.data.username);
 
   } catch (e) {
-    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
     dispatch({ type: AUTH_ERROR, payload: 'User Not Authenticated' });
 
     return {

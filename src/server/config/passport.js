@@ -6,7 +6,6 @@ passport.use(
   new LocalStrategy(
     { usernameField: "username", passwordField: "password" },
     (username, password, done) => {
-      console.log("Kommer du til localStrategy??");
 
       User.getUserByUsername(username,(err, user) => {
         if (err) {
@@ -17,8 +16,6 @@ passport.use(
         }
 
         if (!user) {
-          console.log("bruker finnes ikke!");
-
           return done(null, false, { message: "Unknown User" });
         }
 
@@ -36,13 +33,10 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  console.log("Kommer du til serializeUser?");
-
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-  console.log("Kommer du til deserializeUser?");
 
   User.getUserById(id, (err, user) => {
     done(err, user);

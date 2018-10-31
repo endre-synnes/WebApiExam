@@ -5,10 +5,12 @@ const session = require("express-session");
 const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
 const cors = require('cors');
-const routes = require('./routes/authRoutes');
+//const routes = require('./routes/authRoutes');
 const Repository = require('./db/repository');
 const mongoose = require("mongoose");
 const morgan = require('morgan');
+require("./config/passport");
+const routes = require("./routes/auth");
 
 const app = express();
 
@@ -69,27 +71,27 @@ app.use(session({
 app.use(express.static('public'));
 
 
-passport.use(new LocalStrategy(
-    /*
-        Need to tell which fields represent the  "username" and which the "password".
-        This fields will be in a Form or JSON data sent by user when authenticating.
-     */
-    {
-        usernameField: 'userId',
-        passwordField: 'password'
-    },
-    function (userId, password, done) {
-
-        const ok = Repository.verifyUser(userId, password);
-
-        if (!ok) {
-            return done(null, false, {message: 'Invalid username/password'});
-        }
-
-        const user = Repository.getUser(userId);
-        return done(null, user);
-    }
-));
+// passport.use(new LocalStrategy(
+//     /*
+//         Need to tell which fields represent the  "username" and which the "password".
+//         This fields will be in a Form or JSON data sent by user when authenticating.
+//      */
+//     {
+//         usernameField: 'userId',
+//         passwordField: 'password'
+//     },
+//     function (userId, password, done) {
+//
+//         const ok = Repository.verifyUser(userId, password);
+//
+//         if (!ok) {
+//             return done(null, false, {message: 'Invalid username/password'});
+//         }
+//
+//         const user = Repository.getUser(userId);
+//         return done(null, user);
+//     }
+// ));
 
 /*
     In our server, a user will be represented with some User object,
@@ -98,20 +100,20 @@ passport.use(new LocalStrategy(
     So, we need a way to "serialize" from a User object into a string id,
     and vice-versa (ie, deserialize from string id to User object).
  */
-passport.serializeUser(function (user, done) {
-    done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-
-    const user = Repository.getUser(id);
-
-    if (user !== undefined) {
-        done(null, user);
-    } else {
-        done(null, false);
-    }
-});
+// passport.serializeUser(function (user, done) {
+//     done(null, user.id);
+// });
+//
+// passport.deserializeUser(function (id, done) {
+//
+//     const user = Repository.getUser(id);
+//
+//     if (user !== undefined) {
+//         done(null, user);
+//     } else {
+//         done(null, false);
+//     }
+// });
 
 app.use(passport.initialize());
 app.use(passport.session());

@@ -18,8 +18,8 @@ router.post('/api/login', passport.authenticate('local'), (req, res) => {
 router.post('/api/signup', function(req, res){
 
     console.log("signing up in server");
-    const userId = req.body.userId;
-    const created = Repository.createUser(userId, req.body.password);
+    const username = req.body.username;
+    const created = Repository.createUser(username, req.body.password);
 
     if(! created){
         res.status(400).send();
@@ -65,7 +65,7 @@ router.get("/api/user", (req, res) => {
     return;
   }
 
-  res.status(200).json({userId: req.user.id});
+  res.status(200).json({username: req.user.id});
 });
 
 

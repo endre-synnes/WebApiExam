@@ -15,7 +15,7 @@ import NewGame from "./components/game/NewGame";
 const store = createStore(
   reducers,
   {
-    auth: { authenticated: localStorage.getItem('userId') }
+    auth: { authenticated: localStorage.getItem('username') }
   },
   applyMiddleware(reduxThunk)
 );
