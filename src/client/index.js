@@ -11,7 +11,7 @@ import App from "./components/App";
 import SignUp from './components/auth/SignUp';
 import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
-import NewGame from "./components/game/NewGame";
+import Lobby from "./components/game/Lobby";
 
 const store = createStore(
   reducers,
@@ -29,7 +29,7 @@ ReactDOM.render(
         <Route path="/signup" exact component={SignUp}/>
         <Route path="/signin" exact component={SignIn}/>
         <Route path="/signout" exact component={SignOut}/>
-        <Route path="/new-game" exact component={NewGame}/>
+        <Route path="/lobby" exact component={Lobby}/>
       </App>
     </BrowserRouter>
   </Provider>

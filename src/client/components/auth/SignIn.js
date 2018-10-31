@@ -7,7 +7,7 @@ import { signin } from '../../actions';
 class SignIn extends Component {
   onSubmit(values) {
     this.props.signin(values, () => {
-      this.props.history.push('/new-game');
+      this.props.history.push('/lobby');
     });
   };
 
