@@ -9,10 +9,11 @@ const passport = require("passport");
 // Load User model
 const User = require("../model/User");
 
-// @route POST api/users/register
+// @route POST api/signup
 // @dec Register user
 // @access Public
 router.post("/api/signup", (req, res) => {
+  //TODO implement validation of request body
   // const { errors, isValid } = validateRegisterInput(req.body);
   //
   // // Check validation
@@ -22,8 +23,8 @@ router.post("/api/signup", (req, res) => {
 
   User.findOne({ username: req.body.username }).then(user => {
     if (user) {
-      console.log("nothing");
-      return res.status(400).json(errors);
+      console.log("User name in use!");
+      return res.status(409).json({message: "Username in use"});
     } else {
       // const avatar = gravatar.url(req.body.email, {
       //   s: "200", // Size
@@ -53,14 +54,12 @@ router.post("/api/signup", (req, res) => {
             res.status(204).send();
           });
         });
-
-        //res.send(user).end()
       });
     }
   });
 });
 
-// @route   GET api/users/login
+// @route   GET api/login
 // @desc    Login User
 // @access  Public
 router.post('/api/login', passport.authenticate('local'), (req, res) => {
@@ -68,24 +67,25 @@ router.post('/api/login', passport.authenticate('local'), (req, res) => {
   }
 );
 
+// @route   GET api/logout
+// @desc    Logging a User out and delete cookie
+// @access  Public
 router.post('/api/logout',(req, res) => {
   req.logout();
+
   res.status(200).clearCookie('connect.sid', {
     path: '/'
   });
+
   req.session.destroy(err => {
     res.send(null);
   })
 });
 
+// @route   GET api/user
+// @desc    Validate that a session is still active
+// @access  Public
 router.get("/api/user", (req, res) => {
-
-  /*
-      If a user is logged in by providing the right session cookie,
-      then Passport will automatically instantiate a valid User object
-      and add it to the incoming "req" object
-   */
-
   if(! req.user){
     res.status(401).send();
     return;

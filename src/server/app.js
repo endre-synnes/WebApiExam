@@ -2,11 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require("express-session");
-const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
 const cors = require('cors');
-//const routes = require('./routes/authRoutes');
-const Repository = require('./db/repository');
 const mongoose = require("mongoose");
 const morgan = require('morgan');
 require("./config/passport");
@@ -26,6 +23,7 @@ mongoose
   )
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
+
 /*
     We use an environment variable to decide if allowing all origins
     or not
@@ -49,11 +47,8 @@ if(process.env.CORS){
      */
 }
 
-
-
 //to handle JSON payloads
 app.use(bodyParser.json());
-
 
 /*
     As we are going to use session-based authentication with
@@ -66,58 +61,10 @@ app.use(session({
     saveUninitialized: false
 }));
 
-
 //needed to server static files, like HTML, CSS and JS.
 app.use(express.static('public'));
-
-
-// passport.use(new LocalStrategy(
-//     /*
-//         Need to tell which fields represent the  "username" and which the "password".
-//         This fields will be in a Form or JSON data sent by user when authenticating.
-//      */
-//     {
-//         usernameField: 'userId',
-//         passwordField: 'password'
-//     },
-//     function (userId, password, done) {
-//
-//         const ok = Repository.verifyUser(userId, password);
-//
-//         if (!ok) {
-//             return done(null, false, {message: 'Invalid username/password'});
-//         }
-//
-//         const user = Repository.getUser(userId);
-//         return done(null, user);
-//     }
-// ));
-
-/*
-    In our server, a user will be represented with some User object,
-    which we store in a database, together with its (should-be-hashed) password.
-    But, when doing authentication via HTTP, we only use the user id.
-    So, we need a way to "serialize" from a User object into a string id,
-    and vice-versa (ie, deserialize from string id to User object).
- */
-// passport.serializeUser(function (user, done) {
-//     done(null, user.id);
-// });
-//
-// passport.deserializeUser(function (id, done) {
-//
-//     const user = Repository.getUser(id);
-//
-//     if (user !== undefined) {
-//         done(null, user);
-//     } else {
-//         done(null, false);
-//     }
-// });
-
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 //--- Routes -----------
 app.use('/', routes);
