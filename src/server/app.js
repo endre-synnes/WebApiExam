@@ -5,11 +5,25 @@ const session = require("express-session");
 const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
 const cors = require('cors');
-const routes = require('./routes');
-const Repository = require('./repository');
+const routes = require('./routes/authRoutes');
+const Repository = require('./db/repository');
+const mongoose = require("mongoose");
+const morgan = require('morgan');
 
 const app = express();
 
+//Used for server logging
+app.use(morgan("combined"));
+
+// Connecting to database
+const mongoURI = require("./config/keys").mongoURI;
+mongoose
+  .connect(
+    mongoURI,
+    { useNewUrlParser: true }
+  )
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err));
 /*
     We use an environment variable to decide if allowing all origins
     or not

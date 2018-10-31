@@ -1,8 +1,8 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-const Repository = require('./repository');
+const Repository = require('../db/repository');
 
 
 /*
