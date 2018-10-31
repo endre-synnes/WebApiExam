@@ -9,6 +9,7 @@ import reducers from './reducers';
 import Welcome from "./components/Welcome";
 import App from "./components/App";
 import SignUp from './components/auth/SignUp';
+import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
 import NewGame from "./components/game/NewGame";
 
@@ -26,6 +27,7 @@ ReactDOM.render(
       <App>
         <Route path="/" exact component={Welcome}/>
         <Route path="/signup" exact component={SignUp}/>
+        <Route path="/signin" exact component={SignIn}/>
         <Route path="/signout" exact component={SignOut}/>
         <Route path="/new-game" exact component={NewGame}/>
       </App>

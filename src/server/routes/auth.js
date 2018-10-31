@@ -64,9 +64,7 @@ router.post("/api/signup", (req, res) => {
 // @desc    Login User
 // @access  Public
 router.post('/api/login', passport.authenticate('local'), (req, res) => {
-    console.log(req.user);
-
-    res.send(req.user);
+    res.send(req.user.username);
   }
 );
 
