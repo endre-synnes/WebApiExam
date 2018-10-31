@@ -22,6 +22,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "latest",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
@@ -31,12 +32,12 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "react": "^16.5.0",
+    "react-bootstrap": "^0.32.4",
     "react-dom": "^16.5.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.1",
     "redux-form": "^7.4.2",
-    "redux-thunk": "^2.3.0",
-    "bcryptjs": "latest"
+    "redux-thunk": "^2.3.0"
   }
 }

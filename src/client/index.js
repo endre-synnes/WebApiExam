@@ -12,6 +12,7 @@ import SignUp from './components/auth/SignUp';
 import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
 import Lobby from "./components/game/Lobby";
+import LeaderBoard from "./components/game/LeaderBoard";
 
 const store = createStore(
   reducers,
@@ -30,6 +31,7 @@ ReactDOM.render(
         <Route path="/signin" exact component={SignIn}/>
         <Route path="/signout" exact component={SignOut}/>
         <Route path="/lobby" exact component={Lobby}/>
+        <Route path="/leaderboard" exact component={LeaderBoard}/>
       </App>
     </BrowserRouter>
   </Provider>
