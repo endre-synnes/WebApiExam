@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const morgan = require('morgan');
 require("./config/passport");
 const routes = require("./routes/auth");
+const quizSetup = require("./db/QuizSetup");
 
 const app = express();
 
@@ -24,6 +25,8 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
+//TODO implement so this does not call every time
+quizSetup.createQuizzesFromDefaultData();
 /*
     We use an environment variable to decide if allowing all origins
     or not
