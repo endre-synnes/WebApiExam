@@ -8,6 +8,7 @@ const passport = require("passport");
 
 // Load User model
 const User = require("../model/User");
+const Tokens = require("../ws/tokens");
 
 // @route POST api/signup
 // @dec Register user
@@ -66,6 +67,18 @@ router.post('/api/login', passport.authenticate('local'), (req, res) => {
     res.send(req.user.username);
   }
 );
+
+router.post('/wstoken', function (req, res) {
+
+  if(! req.user){
+    res.status(401).send();
+    return;
+  }
+
+  const t = Tokens.createToken(req.user.id);
+
+  res.status(201).json({wstoken: t});
+});
 
 // @route   GET api/logout
 // @desc    Logging a User out and delete cookie
