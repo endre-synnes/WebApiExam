@@ -45,6 +45,26 @@ function takeUser(){
   return queue.shift();
 }
 
+function getQueue() {
+  if(queue.length === 0){
+    return null;
+  }
 
-module.exports = {addUser, size, takeUser, hasUser};
+  return queue;
+}
+
+function emptyQueue() {
+  queue.forEach(() => takeUser);
+  return queue.length;
+}
+
+function getOrganizer(){
+  if (queue.length > 0) {
+    return queue[0];
+  }
+  return null;
+}
+
+
+module.exports = {addUser, size, takeUser, hasUser, getOrganizer, getQueue, emptyQueue};
 

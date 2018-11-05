@@ -7,13 +7,14 @@ const cors = require('cors');
 const mongoose = require("mongoose");
 const morgan = require('morgan');
 require("./config/passport");
-const routes = require("./routes/auth");
+const authRoute = require("./routes/auth");
+const gameRoute = require("./routes/game-route");
 const quizSetup = require("./db/QuizSetup");
 
 const app = express();
 
 //Used for server logging
-app.use(morgan("combined"));
+//app.use(morgan("combined"));
 
 // Connecting to database
 const mongoURI = require("./config/keys").mongoURI;
@@ -70,7 +71,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //--- Routes -----------
-app.use('/', routes);
+app.use('/', authRoute);
+app.use('/', gameRoute);
 
 //handling 404
 app.use((req, res, next) => {
