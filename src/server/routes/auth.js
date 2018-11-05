@@ -68,13 +68,14 @@ router.post('/api/login', passport.authenticate('local'), (req, res) => {
   }
 );
 
-router.post('/wstoken', function (req, res) {
+router.post('/api/wstoken', function (req, res) {
 
   if(! req.user){
     res.status(401).send();
     return;
   }
 
+  console.log("creating token..........");
   const t = Tokens.createToken(req.user.id);
 
   res.status(201).json({wstoken: t});

@@ -1,8 +1,9 @@
-import { AUTH_USER, AUTH_ERROR } from '../actions/authStatusTypes';
+import { AUTH_USER, AUTH_ERROR, WS_TOKEN } from '../actions/authStatusTypes';
 
 const INITIAL_STATE = {
   authenticated: '',
-  errorMessage: ''
+  errorMessage: '',
+  wstoken: ''
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -11,6 +12,8 @@ export default function(state = INITIAL_STATE, action) {
       return { authenticated: action.payload };
     case AUTH_ERROR:
       return { errorMessage: action.payload };
+    case WS_TOKEN:
+      return { wstoken: action.payload };
     default:
       return state;
   }

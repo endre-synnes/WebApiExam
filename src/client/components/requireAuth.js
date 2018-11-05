@@ -15,11 +15,22 @@ export default ChildComponent => {
     }
 
     shouldNavigateAway() {
-      this.props.isAuthenticated({auth: this.props.auth});
+      // this.props.isAuthenticated(() => {
+      //   console.log("in callback");
+      //   console.log(this.props.auth);
+      //   if (!this.props.auth) {
+      //     console.log(this.props.auth);
+      //     this.props.history.push('/');
+      //   }
+      // });
 
-      if (!this.props.auth) {
-        this.props.history.push('/');
-      }
+      this.props.isAuthenticated({auth: this.props.auth}, () => {
+        if (!this.props.auth) {
+          this.props.history.push('/');
+        }
+      });
+
+
     }
 
     render() {

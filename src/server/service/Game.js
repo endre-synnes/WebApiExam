@@ -9,16 +9,24 @@ class Game {
 
     this.quizzes = Quiz.getAllQuizzes();
 
+    this.counter = 0;
+
     this.currentQuestion = this.quizzes[0];
 
     this.playerIds = playerIds;
 
     this.gameId = this.randomId();
 
-    this.gameState = new GameState();
+    this.gameState = new GameState(this.playerIds, {
+      questionId: this.currentQuestion._id,
+      question: this.currentQuestion.question,
+      alternatives: this.currentQuestion.alternatives,
+      category: this.currentQuestion.category
+    });
 
-    //TODO implement better solution for answer indexing
-    this.gameState.alternatives = {alternative1 : this.currentQuestion.answerOne};
+    //TODO initiate timer
+
+    //TODO start game
 
     this.sockets = new Map();
     playerIds.forEach(id => this.addPlayersToGame(id));
@@ -46,7 +54,6 @@ class Game {
     this.playerIds.forEach(player => this.sendState(player));
   }
 
-  //TODO finish this medthod
   registerListener(playerId) {
     /*
             The users will send messages on the WS each time they make a move.
@@ -84,21 +91,21 @@ class Game {
       console.log("Handling message from '" + playerId+"' for questionId " + questionId
         + " in match " + this.gameId);
 
-      const expectedCounter = this.board.counter + 1;
+      const expectedQuestionId = this.gameState.questionDto._id;
 
       /*
           We start with some input validation, eg checking if the received
           message was really meant for this ongoing match.
        */
 
-      if(counter !== expectedCounter){
+      if(this.currentQuestion._id !== expectedQuestionId){
         socket.emit("update", {error: "Invalid operation"});
-        console.log("Invalid counter: "+counter+" !== " + expectedCounter);
+        console.log("Invalid counter: "+this.currentQuestion._id+" !== " + expectedQuestionId);
         return;
       }
 
-      if(matchId !== this.matchId){
-        console.log("Invalid matchId: "+matchId+" !== " + this.matchId);
+      if(gameId !== this.gameId){
+        console.log("Invalid matchId: "+gameId+" !== " + this.gameId);
         return;
       }
 
@@ -123,13 +130,17 @@ class Game {
        */
 
       //update the state of the game
-      this.board.selectColumn(position);
+
+      //TODO Check for correct answer and update score
+      //this.board.selectColumn(position);
 
       //send such state to the opponent
-      this.sendState(this.opponentId(playerId));
 
-      if(this.board.isGameFinished()){
-        this.callbackWhenFinished(this.matchId);
+      //TODO after countdown send new state to players
+      //this.sendState(this.opponentId(playerId));
+
+      if(this.counter === this.quizzes.length  - 1){
+        this.callbackWhenFinished(this.gameId);
       }
     });
   }
@@ -140,7 +151,7 @@ class Game {
     const payload = {
       data: {
         gameId: this.gameId,
-        currentQuestion: this.currentQuestion,
+        gameState: this.gameState.returnDto(),
         players: this.playerIds
       }
     };

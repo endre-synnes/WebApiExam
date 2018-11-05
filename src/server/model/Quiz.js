@@ -7,20 +7,8 @@ const QuizSchema = new Schema({
     type: String,
     required: true
   },
-  answerOne: {
-    type: String,
-    required: true
-  },
-  answerTwo: {
-    type: String,
-    required: true
-  },
-  answerThree: {
-    type: String,
-    required: true
-  },
-  answerFour: {
-    type: String,
+  alternatives: {
+    type: Array,
     required: true
   },
   correctIndex: {

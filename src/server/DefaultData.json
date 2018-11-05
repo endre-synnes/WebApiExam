@@ -2,28 +2,19 @@
   "quizzes": [
     {
       "question" : "When did the World war 2 start?",
-      "answerOne": "1935",
-      "answerTwo": "1945",
-      "answerThree": "1939",
-      "answerFour": "1940",
+      "alternatives" : ["1935", "1945", "1939", "1940"],
       "correctIndex": 2,
       "category": "History"
     },
     {
       "question" : "How many oscars did the Titanic movie got?",
-      "answerOne": "Five",
-      "answerTwo": "Three",
-      "answerThree": "Eight",
-      "answerFour": "Eleven",
+      "alternatives" : ["Five", "Three", "Eight", "Eleven"],
       "correctIndex": 3,
       "category": "Movie / TV"
     },
     {
       "question" : "In what year was Google launched on the web?",
-      "answerOne": "1999",
-      "answerTwo": "1998",
-      "answerThree": "1994",
-      "answerFour": "2000",
+      "alternatives" : ["1999", "1998", "1994", "2000"],
       "correctIndex": 1,
       "category": "Informatics"
     }

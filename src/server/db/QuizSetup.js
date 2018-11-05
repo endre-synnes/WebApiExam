@@ -26,10 +26,7 @@ function createData() {
 
   let quizObjects = quizData.quizzes.map(q => new Quiz({
     question : q.question,
-    answerOne: q.answerOne,
-    answerTwo: q.answerTwo,
-    answerThree: q.answerThree,
-    answerFour: q.answerFour,
+    alternatives: q.alternatives,
     correctIndex: q.correctIndex,
     category: q.category}));
 

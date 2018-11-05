@@ -44,7 +44,7 @@ function forfeit(userId){
   game.playerIds.forEach(id => userIdToGame.delete(id));
   gameIdToGame.delete(game.gameId);
 
-  game.sendForfeit(userId);
+  //game.sendForfeit(userId);
 }
 
 
