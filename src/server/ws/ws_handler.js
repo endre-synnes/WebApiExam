@@ -7,6 +7,8 @@ let io;
 
 const start = (server) => {
 
+    console.log("setting up web sockets");
+
     //start a WebSocket server besides the REST API from Express
     io = socketIo(server);
 

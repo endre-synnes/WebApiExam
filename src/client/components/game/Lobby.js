@@ -52,9 +52,9 @@ class Lobby extends Component {
 
     });
 
-    this.logInWithWebToken().then(
-      this.startNewGame
-    )
+    this.startNewGame().then(
+      this.logInWithWebToken
+    );
   }
 
   async startNewGame(){
@@ -95,9 +95,31 @@ class Lobby extends Component {
     }
   }
 
+  async startGame(){
+    const url = "/api/start";
+
+    console.log("starting game");
+
+    let response;
+
+    try {
+      response = await fetch(url, {
+        method: "post"
+      });
+    } catch (err) {
+      this.setState({errorMsg: "Failed to connect to server: " + err});
+      return;
+    }
+
+    console.log(response)
+  }
+
   render() {
     return (
-      <div>Start a new game token: {localStorage.getItem('wstoken')}</div>
+      <div>
+        <h4>Start a new game token: {localStorage.getItem('wstoken')}</h4>
+        <button onClick={this.startGame}>Start</button>
+      </div>
     );
   };
 
@@ -106,6 +128,9 @@ class Lobby extends Component {
     this.props.getWsToken();
     const token = localStorage.getItem('wstoken');
 
+    console.log("token before login on web socket:::");
+    console.log(token);
+
     if (token) {
       this.socket.emit('login', token);
     } else {
@@ -113,6 +138,10 @@ class Lobby extends Component {
     }
 
 
+  }
+
+  componentWillUnmount() {
+    this.socket.disconnect();
   }
 }
 

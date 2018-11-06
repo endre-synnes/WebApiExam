@@ -7,22 +7,32 @@ class Game {
 
   constructor(playerIds, callbackWhenFinished){
 
-    this.quizzes = Quiz.getAllQuizzes();
-
-    this.counter = 0;
-
-    this.currentQuestion = this.quizzes[0];
-
     this.playerIds = playerIds;
-
+    this.counter = 0;
     this.gameId = this.randomId();
 
-    this.gameState = new GameState(this.playerIds, {
-      questionId: this.currentQuestion._id,
-      question: this.currentQuestion.question,
-      alternatives: this.currentQuestion.alternatives,
-      category: this.currentQuestion.category
+    this.quizzes = Quiz.getAllQuizzes((err, quizzes) => {
+
+      console.log("error:");
+      console.log(err);
+
+      //console.log("quizzes:");
+      //console.log(quizzes);
+
+      this.currentQuestion = quizzes[0];
+
+      this.gameState = new GameState(this.playerIds, {
+        questionId: this.currentQuestion._id,
+        question: this.currentQuestion.question,
+        alternatives: this.currentQuestion.alternatives,
+        category: this.currentQuestion.category
+      });
+
+      this.start();
     });
+
+
+
 
     //TODO initiate timer
 

@@ -16,12 +16,14 @@ function startMatch(playerIds){
 
   const game = new Game(playerIds, deleteMatch);
 
-  console.log("Starting a new game id : " + game.gameId);
+  console.log("Starting a new gxxame id : " + game.gameId);
 
   playerIds.forEach(id => userIdToGame.set(id, game));
-  gameIdToGame.set(game.gameId, game);
 
-  game.start();
+  console.log("all players in userIdToGame:");
+  console.log(userIdToGame.keys());
+
+  gameIdToGame.set(game.gameId, game);
 }
 
 function deleteMatch(gameId){

@@ -1,5 +1,6 @@
 const express = require("express");
 const PlayerQueue = require("../service/PlayerQueue");
+const ActivePLayers = require("../service/ActivePlayers");
 const OngoingMatches = require("../service/OngoingMatches");
 const router = express.Router();
 
@@ -45,10 +46,17 @@ router.post('/api/start', (req, res) => {
     return;
   }
 
+  console.log("queue:");
   queue = PlayerQueue.getQueue();
+  console.log(queue);
 
   //TODO use queue to check for active players and start game
+  const activePlayers = queue.filter(active => ActivePLayers.isActive(active));
 
+  console.log("active players.");
+  activePlayers.forEach(e => console.log(e));
+
+  OngoingMatches.startMatch(activePlayers);
 
   PlayerQueue.emptyQueue();
 });
