@@ -1,10 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-//const gravatar = require("gravatar");
-
-// Load input validation
-//const validateRegisterInput = require("../../validation/register");
 
 // Load User model
 const User = require("../model/User");
@@ -15,24 +11,13 @@ const Tokens = require("../ws/tokens");
 // @access Public
 router.post("/api/signup", (req, res) => {
   //TODO implement validation of request body
-  // const { errors, isValid } = validateRegisterInput(req.body);
-  //
-  // // Check validation
-  // if (!isValid) {
-  //   return res.status(400).json(errors);
-  // }
+
 
   User.findOne({ username: req.body.username }).then(user => {
     if (user) {
       console.log("User name in use!");
       return res.status(409).json({message: "Username in use"});
     } else {
-      // const avatar = gravatar.url(req.body.email, {
-      //   s: "200", // Size
-      //   r: "pg", // Rating
-      //   d: "mm" // Default
-      // });
-
       const newUser = new User({
         username: req.body.username,
         password: req.body.password
@@ -74,10 +59,7 @@ router.post('/api/wstoken', function (req, res) {
     res.status(401).send();
     return;
   }
-
-  console.log("creating token..........");
   const t = Tokens.createToken(req.user.id);
-
   res.status(201).json({wstoken: t});
 });
 

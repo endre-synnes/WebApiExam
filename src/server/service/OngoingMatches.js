@@ -24,14 +24,9 @@ function startMatch(playerIds){
     }
 
       const game = new Game(playerIds, deleteMatch, quizzes);
-
       console.log("Starting a new game id : " + game.gameId);
 
       playerIds.forEach(id => userIdToGame.set(id, game));
-
-      console.log("all players in userIdToGame:");
-      console.log(userIdToGame.keys());
-
       gameIdToGame.set(game.gameId, game);
     }
 
@@ -57,8 +52,10 @@ function forfeit(userId){
     return;
   }
 
-  game.playerIds.forEach(id => userIdToGame.delete(id));
-  gameIdToGame.delete(game.gameId);
+  userIdToGame.delete(userId);
+
+  //game.playerIds.forEach(id => userIdToGame.delete(id));
+  //gameIdToGame.delete(game.gameId);
 
   //game.sendForfeit(userId);
 }

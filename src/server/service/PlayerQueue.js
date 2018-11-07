@@ -54,7 +54,10 @@ function getQueue() {
 }
 
 function emptyQueue() {
-  queue.forEach(() => takeUser);
+  while (this.size() > 0) {
+    this.takeUser()
+  }
+
   return queue.length;
 }
 

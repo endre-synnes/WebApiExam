@@ -21,7 +21,7 @@ router.post('/api/game', (req, res) => {
   OngoingMatches.forfeit(req.user.id);
 
   if (PlayerQueue.size() > 0) {
-    console.log("is more than zero users");
+    console.log(`Number of players already in queue: ${PlayerQueue.size()}` );
   }
 
   PlayerQueue.addUser(req.user.id);
@@ -30,7 +30,6 @@ router.post('/api/game', (req, res) => {
     res.status(201).json({isOrganizer: true});
     return;
   }
-  console.log(PlayerQueue.size());
   res.status(201).json({isOrganizer: false});
 });
 
@@ -46,15 +45,17 @@ router.post('/api/start', (req, res) => {
     return;
   }
 
-  console.log("queue:");
   queue = PlayerQueue.getQueue();
+  console.log("queue:");
   console.log(queue);
+  console.log("----------------");
 
   //TODO use queue to check for active players and start game
   const activePlayers = queue.filter(active => ActivePLayers.isActive(active));
 
-  console.log("active players.");
+  console.log("active players to join this game:");
   activePlayers.forEach(e => console.log(e));
+  console.log("-------------------");
 
   OngoingMatches.startMatch(activePlayers);
 
