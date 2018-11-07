@@ -11,6 +11,7 @@ class Game {
     this.counter = 0;
     this.gameId = this.randomId();
     this.quizzes = quizzes;
+    this.gameRunning = true;
 
     this.currentQuestion = quizzes[0];
 
@@ -24,17 +25,13 @@ class Game {
       category: this.currentQuestion.category
     });
 
-
-    //TODO initiate timer
-
-    //TODO start game
-
     this.sockets = new Map();
     playerIds.forEach(id => this.addPlayersToGame(id));
 
     this.callbackWhenFinished = callbackWhenFinished;
 
     this.start();
+
   }
 
 
@@ -55,6 +52,17 @@ class Game {
         both players, to inform them who has the first move.
      */
     this.playerIds.forEach(player => this.sendState(player));
+
+    console.log("quizes in start");
+    console.log(this.quizzes);
+
+    let timer = setInterval(() => this.nextQuestion(this.quizzes), 5000);
+
+    setTimeout(() => { clearInterval(timer); console.log("timer ended")}, 5000 * (this.quizzes.length+1))
+
+
+    //setTimeout(() => this.nextQuestion(this.quizzes), 7000);
+
   }
 
   registerListener(playerId) {
@@ -104,16 +112,14 @@ class Game {
           message was really meant for this ongoing match.
        */
 
-      console.log(typeof questionId);
-      console.log(typeof expectedQuestionId);
-
       if(questionId !== expectedQuestionId){
-        socket.emit("update", {error: "Invalid operation"});
+        socket.emit("update", {error: "Illegal answer for this quiz!"});
         console.log("Invalid counter: "+questionId+" !== " + expectedQuestionId);
         return;
       }
 
       if(gameId !== this.gameId){
+        socket.emit("update", {error: "Wrong game!"});
         console.log("Invalid matchId: "+gameId+" !== " + this.gameId);
         return;
       }
@@ -148,25 +154,16 @@ class Game {
       //TODO after countdown send new state to players
       //this.sendState(this.opponentId(playerId));
 
-      if(this.counter === this.quizzes.length  - 1){
-        this.callbackWhenFinished(this.gameId);
-      }
+      // if(this.counter === this.quizzes.length  - 1){
+      //   this.callbackWhenFinished(this.gameId);
+      // }
 
       //TODO checkouing for correct answer
       if (answerIndex === this.currentQuestion.correctIndex) {
 
         //TODO implement check for index
         console.log("correct answer!!");
-        this.currentQuestion = this.quizzes[1];
-
-        this.gameState.nextQuestion({
-          questionId: this.currentQuestion._id,
-          question: this.currentQuestion.question,
-          alternatives: this.currentQuestion.alternatives,
-          category: this.currentQuestion.category
-        });
-
-        this.playerIds.forEach(player => this.sendState(player));
+        
 
       }
 
@@ -177,7 +174,30 @@ class Game {
     });
   }
 
-  nextQuestion(){
+  nextQuestion(qquizzz){
+
+    this.counter += 1;
+
+    console.log("quissezz here:");
+    console.log(qquizzz);
+
+    console.log("counter: "+this.counter);
+    
+    if (this.counter >= this.quizzes.length) {
+      this.gameRunning = false;
+      this.playerIds.forEach(player => this.sendState(player));
+      this.callbackWhenFinished(this.gameId);
+    } else {
+      this.currentQuestion = qquizzz[this.counter];
+      this.gameState.nextQuestion({
+        questionId: this.currentQuestion._id,
+        question: this.currentQuestion.question,
+        alternatives: this.currentQuestion.alternatives,
+        category: this.currentQuestion.category
+      });
+
+      this.playerIds.forEach(player => this.sendState(player));
+    }
 
   }
 
@@ -188,14 +208,15 @@ class Game {
       data: {
         gameId: this.gameId,
         gameState: this.gameState.returnDto(),
-        players: this.playerIds
+        players: this.playerIds,
+        gameRunning: this.gameRunning
       }
     };
 
     const socket = this.sockets.get(playerId);
-
     socket.emit('update', payload);
   }
+
 }
 
 module.exports = Game;
