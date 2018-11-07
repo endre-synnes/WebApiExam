@@ -156,6 +156,7 @@ class Game {
       if (answerIndex === this.currentQuestion.correctIndex) {
 
         //TODO implement check for index
+        console.log("correct answer!!");
         this.currentQuestion = this.quizzes[1];
 
         this.gameState.nextQuestion({
@@ -174,6 +175,10 @@ class Game {
       //TODO send newxt question after counter finished
 
     });
+  }
+
+  nextQuestion(){
+
   }
 
   sendState(playerId) {

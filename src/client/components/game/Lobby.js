@@ -157,7 +157,10 @@ class Lobby extends Component {
     if (this.state.gameState) {
       return <div>
         <p>{this.state.gameState.question}</p>
-        <button onClick={this.makeGuess}>Make guess</button>
+        <button onClick={() => this.makeGuess(0)}>{this.state.gameState.alternatives[0]}</button>
+        <button onClick={() => this.makeGuess(1)}>{this.state.gameState.alternatives[1]}</button>
+        <button onClick={() => this.makeGuess(2)}>{this.state.gameState.alternatives[2]}</button>
+        <button onClick={() => this.makeGuess(3)}>{this.state.gameState.alternatives[3]}</button>
         </div>
     } else {
       return <p>Hit start</p>
@@ -200,11 +203,11 @@ class Lobby extends Component {
     });
   }
 
-  makeGuess(){
+  makeGuess(index){
     if (this.state.gameState) {
       this.socket.emit('insertion', {
         questionId: this.state.gameState.questionId,
-        answerIndex: 2,
+        answerIndex: index,
         gameId: this.state.gameId
       });
     }
