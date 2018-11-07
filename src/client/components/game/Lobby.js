@@ -204,7 +204,7 @@ class Lobby extends Component {
     if (this.state.gameState) {
       this.socket.emit('insertion', {
         questionId: this.state.gameState.questionId,
-        answerIndex: 1,
+        answerIndex: 2,
         gameId: this.state.gameId
       });
     }

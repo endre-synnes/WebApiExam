@@ -151,6 +151,28 @@ class Game {
       if(this.counter === this.quizzes.length  - 1){
         this.callbackWhenFinished(this.gameId);
       }
+
+      //TODO checkouing for correct answer
+      if (answerIndex === this.currentQuestion.correctIndex) {
+
+        //TODO implement check for index
+        this.currentQuestion = this.quizzes[1];
+
+        this.gameState.nextQuestion({
+          questionId: this.currentQuestion._id,
+          question: this.currentQuestion.question,
+          alternatives: this.currentQuestion.alternatives,
+          category: this.currentQuestion.category
+        });
+
+        this.playerIds.forEach(player => this.sendState(player));
+
+      }
+
+      //TODO save score
+
+      //TODO send newxt question after counter finished
+
     });
   }
 
