@@ -1,4 +1,5 @@
 const Game = require('../service/Game');
+const Quiz = require("../model/Quiz");
 
 
 /*
@@ -14,16 +15,29 @@ const gameIdToGame = new Map();
 
 function startMatch(playerIds){
 
-  const game = new Game(playerIds, deleteMatch);
+  const quizzes = Quiz.getAllQuizzes((err, quizzes) => {
 
-  console.log("Starting a new gxxame id : " + game.gameId);
+    if (err) {
+      console.log("error:");
+      console.log(err);
+      return;
+    }
 
-  playerIds.forEach(id => userIdToGame.set(id, game));
+      const game = new Game(playerIds, deleteMatch, quizzes);
 
-  console.log("all players in userIdToGame:");
-  console.log(userIdToGame.keys());
+      console.log("Starting a new game id : " + game.gameId);
 
-  gameIdToGame.set(game.gameId, game);
+      playerIds.forEach(id => userIdToGame.set(id, game));
+
+      console.log("all players in userIdToGame:");
+      console.log(userIdToGame.keys());
+
+      gameIdToGame.set(game.gameId, game);
+    }
+
+  );
+
+
 }
 
 function deleteMatch(gameId){

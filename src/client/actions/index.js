@@ -109,10 +109,11 @@ export const getWsToken = (callback) => async dispatch => {
     dispatch({ type: WS_TOKEN, payload: response.data.wstoken });
     localStorage.setItem('wstoken', response.data.wstoken);
 
-    //callback();
+    callback();
     return response.data.wstoken;
 
   } catch (e) {
     dispatch({ type: AUTH_ERROR, payload: "Error while getting ws token" });
+    callback();
   }
 };

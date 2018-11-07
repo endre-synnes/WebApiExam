@@ -59,6 +59,8 @@ router.post('/api/start', (req, res) => {
   OngoingMatches.startMatch(activePlayers);
 
   PlayerQueue.emptyQueue();
+
+  res.status(201).json({started: true});
 });
 
 module.exports = router;

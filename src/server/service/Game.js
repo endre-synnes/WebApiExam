@@ -5,33 +5,24 @@ const GameState = require("../../shared/GameState");
 
 class Game {
 
-  constructor(playerIds, callbackWhenFinished){
+  constructor(playerIds, callbackWhenFinished, quizzes){
 
     this.playerIds = playerIds;
     this.counter = 0;
     this.gameId = this.randomId();
+    this.quizzes = quizzes;
 
-    this.quizzes = Quiz.getAllQuizzes((err, quizzes) => {
+    this.currentQuestion = quizzes[0];
 
-      console.log("error:");
-      console.log(err);
+    console.log("current question");
+    console.log(this.currentQuestion);
 
-      //console.log("quizzes:");
-      //console.log(quizzes);
-
-      this.currentQuestion = quizzes[0];
-
-      this.gameState = new GameState(this.playerIds, {
-        questionId: this.currentQuestion._id,
-        question: this.currentQuestion.question,
-        alternatives: this.currentQuestion.alternatives,
-        category: this.currentQuestion.category
-      });
-
-      this.start();
+    this.gameState = new GameState(this.playerIds, {
+      questionId: this.currentQuestion._id,
+      question: this.currentQuestion.question,
+      alternatives: this.currentQuestion.alternatives,
+      category: this.currentQuestion.category
     });
-
-
 
 
     //TODO initiate timer
@@ -42,6 +33,8 @@ class Game {
     playerIds.forEach(id => this.addPlayersToGame(id));
 
     this.callbackWhenFinished = callbackWhenFinished;
+
+    this.start();
   }
 
 
@@ -94,6 +87,9 @@ class Game {
         return;
       }
 
+      console.log("data from insertion");
+      console.log(data);
+
       const questionId = data.questionId;
       const answerIndex = data.answerIndex;
       const gameId = data.gameId;
@@ -101,16 +97,19 @@ class Game {
       console.log("Handling message from '" + playerId+"' for questionId " + questionId
         + " in match " + this.gameId);
 
-      const expectedQuestionId = this.gameState.questionDto._id;
+      const expectedQuestionId = this.gameState.questionDto.questionId.toString();
 
       /*
           We start with some input validation, eg checking if the received
           message was really meant for this ongoing match.
        */
 
-      if(this.currentQuestion._id !== expectedQuestionId){
+      console.log(typeof questionId);
+      console.log(typeof expectedQuestionId);
+
+      if(questionId !== expectedQuestionId){
         socket.emit("update", {error: "Invalid operation"});
-        console.log("Invalid counter: "+this.currentQuestion._id+" !== " + expectedQuestionId);
+        console.log("Invalid counter: "+questionId+" !== " + expectedQuestionId);
         return;
       }
 

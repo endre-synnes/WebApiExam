@@ -39,12 +39,18 @@ const start = (server) => {
          */
         socket.on('login', (data) => {
 
+            console.log("in login in web socket");
+            console.log(data);
+
             if(data === null || data === undefined){
                 socket.emit("update", {error: "No payload provided"});
                 return;
             }
 
             const token = data.wstoken;
+
+            console.log("ws token in data body");
+            console.log(data.wstoken);
 
             if(token === null || token === undefined){
                 socket.emit("update", {error: "Missing token"});

@@ -9,18 +9,25 @@ import openSocket from 'socket.io-client';
 
 class Lobby extends Component {
 
-
-  componentDidMount() {
+  constructor(props){
+    super(props);
 
     this.state = {
       gameId: null,
       gameState: null,
       players: null,
-      errorMsg: null
+      errorMsg: null,
+      isOrganizer: false
     };
+  }
+
+
+  componentDidMount() {
+
+
 
     this.startNewGame = this.startNewGame.bind(this);
-
+    this.makeGuess = this.makeGuess.bind(this);
 
     this.socket = openSocket(window.location.origin);
 
@@ -38,6 +45,9 @@ class Lobby extends Component {
 
       const data = dto.data;
 
+      console.log("data from update:");
+      console.log(data);
+
       this.setState({
         gameId: data.gameId,
         gameState: data.gameState,
@@ -52,21 +62,24 @@ class Lobby extends Component {
 
     });
 
-    this.startNewGame().then(
-      this.logInWithWebToken
-    );
+    this.logInWithWebToken().then(
+      this.startNewGame
+    )
+    // this.startNewGame().then(
+    //   this.logInWithWebToken
+    // );
   }
 
   async startNewGame(){
-    /*
-            When we try to start a new match, the current one (if any)
-            should be deleted.
-         */
+
+    console.log("calling /api/game");
+
     this.setState({
       gameId: null,
       gameState: null,
       players: null,
-      errorMsg: null
+      errorMsg: null,
+      isOrganizer: false
     });
 
     const url = "/api/game";
@@ -93,6 +106,11 @@ class Lobby extends Component {
       this.setState({errorMsg: "Error when connecting to server: status code " + response.status});
       return;
     }
+
+    const payload = await response.json();
+
+    console.log(payload);
+    this.setState({isOrganizer: payload.isOrganizer});
   }
 
   async startGame(){
@@ -111,36 +129,89 @@ class Lobby extends Component {
       return;
     }
 
-    console.log(response)
+    const payload = response.json();
+    console.log("payload form start game");
+    console.log(payload)
+
+  }
+
+  renderLoginBtn(){
+    if (this.state.isOrganizer) {
+      return <button onClick={this.startGame}>Start</button>
+    }
   }
 
   render() {
     return (
       <div>
         <h4>Start a new game token: {localStorage.getItem('wstoken')}</h4>
-        <button onClick={this.startGame}>Start</button>
+        {this.renderLoginBtn()}
+        {this.renderQuiz()}
       </div>
     );
   };
 
 
-  async logInWithWebToken(){
-    this.props.getWsToken();
-    const token = localStorage.getItem('wstoken');
+  renderQuiz(){
 
-    console.log("token before login on web socket:::");
-    console.log(token);
-
-    if (token) {
-      this.socket.emit('login', token);
+    if (this.state.gameState) {
+      return <div>
+        <p>{this.state.gameState.question}</p>
+        <button onClick={this.makeGuess}>Make guess</button>
+        </div>
     } else {
-      console.log("could not provide ws token")
+      return <p>Hit start</p>
+    }
+  }
+
+
+  async logInWithWebToken(){
+    const url = "/api/wstoken";
+
+    let response;
+
+    try {
+      response = await fetch(url, {
+        method: "post"
+      });
+
+      const payload = await response.json();
+
+      console.log("token before login on web socket:::");
+      console.log(payload);
+
+      this.socket.emit('login', payload);
+
+    } catch (err) {
+      this.setState({errorMsg: "Failed to connect to server: " + err});
+      return;
     }
 
 
+    this.props.getWsToken(() => {
+      const token = localStorage.getItem('wstoken');
+
+
+
+      if (token) {
+      } else {
+        console.log("could not provide ws token")
+      }
+    });
+  }
+
+  makeGuess(){
+    if (this.state.gameState) {
+      this.socket.emit('insertion', {
+        questionId: this.state.gameState.questionId,
+        answerIndex: 1,
+        gameId: this.state.gameId
+      });
+    }
   }
 
   componentWillUnmount() {
+    console.log("logging out of socket");
     this.socket.disconnect();
   }
 }
