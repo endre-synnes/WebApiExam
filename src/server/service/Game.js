@@ -2,11 +2,16 @@ const Quiz = require("../model/Quiz");
 const crypto = require("crypto");
 const ActivePlayers = require("./ActivePlayers");
 const GameState = require("../../shared/GameState");
+const User = require("../model/User");
 
 class Game {
 
+
   constructor(playerIds, callbackWhenFinished, quizzes){
 
+    this.userIdToCurrentScore = new Map();
+
+    this.idOfWinner = null;
     this.playerIds = playerIds;
     this.counter = 0;
     this.gameId = this.randomId();
@@ -46,6 +51,7 @@ class Game {
   start(){
 
     this.playerIds.forEach(player => this.registerListener(player));
+    this.playerIds.forEach(player => this.userIdToCurrentScore.set(player, 0));
 
     /*
         When a new match is started, we need to update
@@ -151,44 +157,33 @@ class Game {
 
       //send such state to the opponent
 
-      //TODO after countdown send new state to players
       //this.sendState(this.opponentId(playerId));
 
       // if(this.counter === this.quizzes.length  - 1){
       //   this.callbackWhenFinished(this.gameId);
       // }
 
-      //TODO checkouing for correct answer
-      if (answerIndex === this.currentQuestion.correctIndex) {
-
-        //TODO implement check for index
+      if (this.gameRunning && answerIndex === this.currentQuestion.correctIndex) {
         console.log("correct answer!!");
-        
-
+        const newScore = this.userIdToCurrentScore.get(playerId) + 1;
+        this.userIdToCurrentScore.set(playerId, newScore);
+        console.log(`new score: ${newScore}`);
       }
 
-      //TODO save score
 
-      //TODO send newxt question after counter finished
+      //TODO save score here
 
     });
   }
 
-  nextQuestion(qquizzz){
+  nextQuestion(quizzes){
 
     this.counter += 1;
 
-    console.log("quissezz here:");
-    console.log(qquizzz);
-
-    console.log("counter: "+this.counter);
-    
     if (this.counter >= this.quizzes.length) {
-      this.gameRunning = false;
-      this.playerIds.forEach(player => this.sendState(player));
-      this.callbackWhenFinished(this.gameId);
+      this.endGame();
     } else {
-      this.currentQuestion = qquizzz[this.counter];
+      this.currentQuestion = quizzes[this.counter];
       this.gameState.nextQuestion({
         questionId: this.currentQuestion._id,
         question: this.currentQuestion.question,
@@ -201,6 +196,29 @@ class Game {
 
   }
 
+  endGame(){
+    this.gameRunning = false;
+
+    let currentMax = 0;
+
+    this.userIdToCurrentScore.forEach((value, key) => {
+      if (value > currentMax) {
+        currentMax = value;
+        this.idOfWinner = key;
+      }
+    });
+
+    if (this.idOfWinner) {
+      User.updateWins(this.idOfWinner, (error, user) => {
+        console.log("winner is saved, response: ");
+        console.log(user);
+      })
+    }
+
+    this.playerIds.forEach(player => this.sendState(player));
+    this.callbackWhenFinished(this.gameId);
+  }
+
   sendState(playerId) {
     console.log("Sending update to '"+playerId+"' for match " + this.gameId);
 
@@ -209,7 +227,8 @@ class Game {
         gameId: this.gameId,
         gameState: this.gameState.returnDto(),
         players: this.playerIds,
-        gameRunning: this.gameRunning
+        gameRunning: this.gameRunning,
+        winner: this.idOfWinner
       }
     };
 

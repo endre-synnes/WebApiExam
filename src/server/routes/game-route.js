@@ -4,6 +4,7 @@ const ActivePLayers = require("../service/ActivePlayers");
 const OngoingMatches = require("../service/OngoingMatches");
 const router = express.Router();
 
+//TODO implementer endepunkt for å lage quiz
 
 router.post('/api/game', (req, res) => {
 
@@ -50,7 +51,6 @@ router.post('/api/start', (req, res) => {
   console.log(queue);
   console.log("----------------");
 
-  //TODO use queue to check for active players and start game
   const activePlayers = queue.filter(active => ActivePLayers.isActive(active));
 
   console.log("active players to join this game:");

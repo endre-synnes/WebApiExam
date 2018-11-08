@@ -15,6 +15,10 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  wins: {
+    type: Number,
+    default: 0
   }
 });
 
@@ -30,7 +34,7 @@ module.exports.createUser = (newUser, callback) => {
 };
 
 module.exports.getUserByUsername = (username, callback) => {
-  var query = { username: username };
+  const query = {username: username};
   User.findOne(query, callback);
 };
 
@@ -43,4 +47,12 @@ module.exports.comparePassword = (candidatePassword, hash, callback) => {
     if (err) throw err;
     callback(null, isMatch);
   });
+};
+
+module.exports.updateWins = (id, callback) => {
+  User.findByIdAndUpdate(
+    id,
+    { $inc: { "wins" : 1 } },
+    {new: true},
+    callback);
 };

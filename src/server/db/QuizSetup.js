@@ -3,6 +3,8 @@ const Quiz = require("../model/Quiz");
 
 module.exports.createQuizzesFromDefaultData = () => {
 
+  // Sjekk for ny data i default quiz dokumentet
+
   Quiz.getAllQuizzes(function(err, quizzes){
     if (err) {
       console.log(err);
