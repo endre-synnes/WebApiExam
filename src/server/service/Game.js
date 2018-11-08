@@ -21,7 +21,7 @@ class Game {
     this.counter = 0;
     this.gameId = this.randomId();
     this.quizzes = quizzes;
-    this.gameRunning = true;
+    this.gameFinished = false;
 
     this.currentQuestion = quizzes[0];
 
@@ -143,7 +143,7 @@ class Game {
           not the opponent.
        */
 
-      if (this.gameRunning && answerIndex === this.currentQuestion.correctIndex) {
+      if (!this.gameFinished && answerIndex === this.currentQuestion.correctIndex) {
         console.log("correct answer!!");
         const newScore = this.userIdToCurrentScore.get(playerId) + 1;
         this.userIdToCurrentScore.set(playerId, newScore);
@@ -173,7 +173,7 @@ class Game {
   }
 
   endGame(){
-    this.gameRunning = false;
+    this.gameFinished = true;
 
     let currentMax = 0;
     let idOfWinner = null;
@@ -207,7 +207,7 @@ class Game {
         gameId: this.gameId,
         gameState: this.gameState.returnDto(),
         players: this.playerIds,
-        gameRunning: this.gameRunning,
+        gameFinished: this.gameFinished,
         winner: this.nameOfWinner
       }
     };

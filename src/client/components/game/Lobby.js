@@ -17,18 +17,16 @@ class Lobby extends Component {
       gameState: null,
       players: null,
       errorMsg: null,
-      isOrganizer: false
+      isOrganizer: false,
+      gameFinished: false,
+      winner: null
     };
   }
 
 
   componentDidMount() {
-
-
-
-    this.startNewGame = this.startNewGame.bind(this);
+    this.connectToGame = this.connectToGame.bind(this);
     this.makeGuess = this.makeGuess.bind(this);
-
     this.socket = openSocket(window.location.origin);
 
     this.socket.on("update",  (dto) => {
@@ -51,7 +49,10 @@ class Lobby extends Component {
       this.setState({
         gameId: data.gameId,
         gameState: data.gameState,
-        players: data.players
+        players: data.players,
+        isOrganizer: data.isOrganizer,
+        gameFinished: data.gameFinished,
+        winner: data.winner
       });
 
       this.socket.on('disconnect', () => {
@@ -63,14 +64,14 @@ class Lobby extends Component {
     });
 
     this.logInWithWebToken().then(
-      this.startNewGame
+      this.connectToGame
     )
-    // this.startNewGame().then(
+    // this.connectToGame().then(
     //   this.logInWithWebToken
     // );
   }
 
-  async startNewGame(){
+  async connectToGame(){
 
     console.log("calling /api/game");
 
@@ -79,7 +80,9 @@ class Lobby extends Component {
       gameState: null,
       players: null,
       errorMsg: null,
-      isOrganizer: false
+      isOrganizer: false,
+      gameFinished: false,
+      winner: null
     });
 
     const url = "/api/game";
@@ -135,17 +138,23 @@ class Lobby extends Component {
 
   }
 
-  renderLoginBtn(){
-    if (this.state.isOrganizer) {
-      return <button onClick={this.startGame}>Start</button>
+  renderStartGameView(){
+    if (this.state.isOrganizer && !this.state.gameState) {
+      return <div>
+        <h4>Start a new game!</h4>
+        <button onClick={this.startGame}>Start new Game</button>
+      </div>
+    } else if (!this.state.isOrganizer && !this.state.gameState) {
+      return <div>
+        <h4>Waiting for organiser to start the game...</h4>
+      </div>
     }
   }
 
   render() {
     return (
       <div>
-        <h4>Start a new game token: {localStorage.getItem('wstoken')}</h4>
-        {this.renderLoginBtn()}
+        {this.renderStartGameView()}
         {this.renderQuiz()}
       </div>
     );
@@ -153,8 +162,7 @@ class Lobby extends Component {
 
 
   renderQuiz(){
-
-    if (this.state.gameState) {
+    if (this.state.gameState && !this.state.gameFinished) {
       return <div>
         <p>{this.state.gameState.question}</p>
         <button onClick={() => this.makeGuess(0)}>{this.state.gameState.alternatives[0]}</button>
@@ -162,8 +170,8 @@ class Lobby extends Component {
         <button onClick={() => this.makeGuess(2)}>{this.state.gameState.alternatives[2]}</button>
         <button onClick={() => this.makeGuess(3)}>{this.state.gameState.alternatives[3]}</button>
         </div>
-    } else {
-      return <p>Hit start</p>
+    } else if (this.state.gameFinished) {
+      return <div>Good game!</div>
     }
   }
 
