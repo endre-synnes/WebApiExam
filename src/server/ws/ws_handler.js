@@ -1,3 +1,8 @@
+/*
+    INFO:
+    This file is inspired by The Web And API design lecture 11.
+ */
+
 const socketIo = require('socket.io');
 const Tokens = require('./tokens');
 const ActivePlayers = require('../service/ActivePlayers');

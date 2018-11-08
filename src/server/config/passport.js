@@ -1,3 +1,8 @@
+/*
+    INFO:
+    This file is inspired by The Udemy course: Advanced React and Redux: 2018 Edition (Made by Stephen Grider)
+ */
+
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../model/User");
 const passport = require("passport");

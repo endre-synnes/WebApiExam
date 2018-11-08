@@ -1,3 +1,8 @@
+/*
+    INFO:
+    This file is inspired by The Web And API design lecture 11.
+ */
+
 const Quiz = require("../model/Quiz");
 const crypto = require("crypto");
 const ActivePlayers = require("./ActivePlayers");
@@ -11,7 +16,7 @@ class Game {
 
     this.userIdToCurrentScore = new Map();
 
-    this.idOfWinner = null;
+    this.nameOfWinner = null;
     this.playerIds = playerIds;
     this.counter = 0;
     this.gameId = this.randomId();
@@ -52,23 +57,11 @@ class Game {
 
     this.playerIds.forEach(player => this.registerListener(player));
     this.playerIds.forEach(player => this.userIdToCurrentScore.set(player, 0));
-
-    /*
-        When a new match is started, we need to update
-        both players, to inform them who has the first move.
-     */
     this.playerIds.forEach(player => this.sendState(player));
 
-    console.log("quizes in start");
-    console.log(this.quizzes);
-
-    let timer = setInterval(() => this.nextQuestion(this.quizzes), 5000);
-
-    setTimeout(() => { clearInterval(timer); console.log("timer ended")}, 5000 * (this.quizzes.length+1))
-
-
-    //setTimeout(() => this.nextQuestion(this.quizzes), 7000);
-
+    const millisecondsTimer = 5000;
+    let timer = setInterval(() => this.nextQuestion(this.quizzes), millisecondsTimer);
+    setTimeout(() => { clearInterval(timer); console.log("timer ended")}, millisecondsTimer * (this.quizzes.length+1))
   }
 
   registerListener(playerId) {
@@ -150,19 +143,6 @@ class Game {
           not the opponent.
        */
 
-      //update the state of the game
-
-      //TODO Check for correct answer and update score
-      //this.board.selectColumn(position);
-
-      //send such state to the opponent
-
-      //this.sendState(this.opponentId(playerId));
-
-      // if(this.counter === this.quizzes.length  - 1){
-      //   this.callbackWhenFinished(this.gameId);
-      // }
-
       if (this.gameRunning && answerIndex === this.currentQuestion.correctIndex) {
         console.log("correct answer!!");
         const newScore = this.userIdToCurrentScore.get(playerId) + 1;
@@ -170,14 +150,10 @@ class Game {
         console.log(`new score: ${newScore}`);
       }
 
-
-      //TODO save score here
-
     });
   }
 
   nextQuestion(quizzes){
-
     this.counter += 1;
 
     if (this.counter >= this.quizzes.length) {
@@ -200,22 +176,26 @@ class Game {
     this.gameRunning = false;
 
     let currentMax = 0;
+    let idOfWinner = null;
 
     this.userIdToCurrentScore.forEach((value, key) => {
       if (value > currentMax) {
         currentMax = value;
-        this.idOfWinner = key;
+        idOfWinner = key;
       }
     });
 
-    if (this.idOfWinner) {
-      User.updateWins(this.idOfWinner, (error, user) => {
+    if (idOfWinner) {
+      User.updateWins(idOfWinner, (error, user) => {
         console.log("winner is saved, response: ");
         console.log(user);
+        this.nameOfWinner = user.username;
+        this.playerIds.forEach(player => this.sendState(player));
       })
-    }
+    } else {
+      this.playerIds.forEach(player => this.sendState(player));
 
-    this.playerIds.forEach(player => this.sendState(player));
+    }
     this.callbackWhenFinished(this.gameId);
   }
 
@@ -228,7 +208,7 @@ class Game {
         gameState: this.gameState.returnDto(),
         players: this.playerIds,
         gameRunning: this.gameRunning,
-        winner: this.idOfWinner
+        winner: this.nameOfWinner
       }
     };
 

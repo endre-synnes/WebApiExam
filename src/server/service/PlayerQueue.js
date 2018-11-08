@@ -1,4 +1,9 @@
 /*
+    INFO:
+    This file is inspired by The Web And API design lecture 11.
+ */
+
+/*
     When a user wants to play, it needs an opponent.
     So, we need at least 2 players.
     A user has to wait until an opponent is available.

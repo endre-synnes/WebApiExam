@@ -1,4 +1,7 @@
-
+/*
+    INFO:
+    This file is inspired by The Web And API design lecture 11.
+ */
 /*
     For each active player that is currently online, we need to keep
     track of their WS sockets.

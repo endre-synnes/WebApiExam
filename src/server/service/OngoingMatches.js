@@ -1,3 +1,8 @@
+/*
+    INFO:
+    This file is inspired by The Web And API design lecture 11.
+ */
+
 const Game = require('../service/Game');
 const Quiz = require("../model/Quiz");
 

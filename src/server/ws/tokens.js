@@ -1,3 +1,8 @@
+/*
+    INFO:
+    This file is inspired by The Web And API design lecture 11.
+ */
+
 const crypto = require("crypto");
 
 /*

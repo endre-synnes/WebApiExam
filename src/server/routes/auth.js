@@ -1,3 +1,8 @@
+/*
+    INFO:
+    This file is inspired by The Udemy course: Advanced React and Redux: 2018 Edition (Made by Stephen Grider)
+ */
+
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
@@ -37,7 +42,7 @@ router.post("/api/signup", (req, res) => {
               return next(err);
             }
 
-            res.status(204).send();
+            res.status(201).send({username: req.user.username});
           });
         });
       });
@@ -49,7 +54,7 @@ router.post("/api/signup", (req, res) => {
 // @desc    Login User
 // @access  Public
 router.post('/api/login', passport.authenticate('local'), (req, res) => {
-    res.send(req.user.username);
+    res.send({username: req.user.username});
   }
 );
 
@@ -87,7 +92,7 @@ router.get("/api/user", (req, res) => {
     return;
   }
 
-  res.status(200).json({username: req.user.id});
+  res.status(200).json({username: req.user.username});
 });
 
 module.exports = router;
