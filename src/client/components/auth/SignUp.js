@@ -35,8 +35,7 @@ class SignUp extends Component {
             autoComplete="none"
           />
         </fieldset>
-        <div>{this.props.errorMessage}</div>
-        <button>Sign Up!</button>
+        <button className="btn">Sign Up!</button>
       </form>
     );
   }
