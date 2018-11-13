@@ -1,7 +1,8 @@
 import React, {Component} from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
 import {Nav, Navbar, NavItem} from "react-bootstrap";
+import requireAuth from "./requireAuth";
 
 class Header extends Component {
   renderLinks() {
@@ -9,10 +10,10 @@ class Header extends Component {
       return(
         <Nav>
           <NavItem eventKey={1}>
-            <Link to={"/lobby"} style={{ textDecoration: 'none'}}>Lobby</Link>
+            <NavLink to={"/lobby"} style={{ textDecoration: 'none'}}>Lobby</NavLink>
           </NavItem>
           <NavItem eventKey={2}>
-            <Link to={"/leaderboard"} style={{ textDecoration: 'none'}}>Leaderboard</Link>
+            <NavLink to={"/leaderboard"} style={{ textDecoration: 'none'}}>Leaderboard</NavLink>
           </NavItem>
         </Nav>
       )
@@ -45,7 +46,7 @@ class Header extends Component {
       return (
         <Nav pullRight>
           <NavItem eventKey={3} href="#">
-            <Link to={"/signout"} style={{ textDecoration: 'none' }}>Sign out</Link>
+            <NavLink to={"/signout"} style={{ textDecoration: 'none' }}>Sign out</NavLink>
           </NavItem>
         </Nav>
       )
@@ -53,10 +54,10 @@ class Header extends Component {
       return (
         <Nav pullRight>
           <NavItem eventKey={3}>
-            <Link to={"/signup"} style={{ textDecoration: 'none' }}>Sign up</Link>
+            <NavLink to={"/signup"} style={{ textDecoration: 'none' }}>Sign up</NavLink>
           </NavItem>
           <NavItem eventKey={4} href="#">
-            <Link to={"/signin"} style={{ textDecoration: 'none' }}>Sign in</Link>
+            <NavLink to={"/signin"} style={{ textDecoration: 'none' }}>Sign in</NavLink>
           </NavItem>
         </Nav>
       )
@@ -69,7 +70,7 @@ class Header extends Component {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Quiz Game</Link>
+              <NavLink to="/">Quiz Game</NavLink>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -86,5 +87,4 @@ class Header extends Component {
 function mapStateToProps(state) {
   return { authenticated: state.auth.authenticated };
 }
-
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps)(requireAuth(Header));

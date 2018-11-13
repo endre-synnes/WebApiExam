@@ -23,6 +23,10 @@ class Game {
     this.quizzes = quizzes;
     this.gameFinished = false;
 
+    this.millisecondsTimer = 10000;
+    this.currentQuizTimer = new Date();
+
+
     this.currentQuestion = quizzes[0];
 
     console.log("current question");
@@ -59,9 +63,8 @@ class Game {
     this.playerIds.forEach(player => this.userIdToCurrentScore.set(player, 0));
     this.playerIds.forEach(player => this.sendState(player));
 
-    const millisecondsTimer = 5000;
-    let timer = setInterval(() => this.nextQuestion(this.quizzes), millisecondsTimer);
-    setTimeout(() => { clearInterval(timer); console.log("timer ended")}, millisecondsTimer * (this.quizzes.length+1))
+    let timer = setInterval(() => this.nextQuestion(this.quizzes), this.millisecondsTimer);
+    setTimeout(() => { clearInterval(timer); console.log("timer ended")}, this.millisecondsTimer * (this.quizzes.length+1))
   }
 
   registerListener(playerId) {
@@ -145,7 +148,11 @@ class Game {
 
       if (!this.gameFinished && answerIndex === this.currentQuestion.correctIndex) {
         console.log("correct answer!!");
-        const newScore = this.userIdToCurrentScore.get(playerId) + 1;
+        let endTime = new Date();
+        let maxScore = 1000;
+        let diff = (this.currentQuizTimer - endTime) / 10;
+
+        const newScore = this.userIdToCurrentScore.get(playerId) + (maxScore + diff);
         this.userIdToCurrentScore.set(playerId, newScore);
         console.log(`new score: ${newScore}`);
       }
@@ -154,6 +161,7 @@ class Game {
   }
 
   nextQuestion(quizzes){
+    this.currentQuizTimer = new Date();
     this.counter += 1;
 
     if (this.counter >= this.quizzes.length) {

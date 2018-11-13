@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {isAuthenticated} from '../actions';
+import { withRouter } from "react-router-dom";
 
 export default ChildComponent => {
   class ComposedComponent extends Component {
@@ -14,6 +15,8 @@ export default ChildComponent => {
       this.shouldNavigateAway();
     }
 
+
+
     shouldNavigateAway() {
       // this.props.isAuthenticated(() => {
       //   console.log("in callback");
@@ -24,7 +27,7 @@ export default ChildComponent => {
       //   }
       // });
 
-      this.props.isAuthenticated({auth: this.props.auth}, () => {
+      this.props.isAuthenticated( () => {
         if (!this.props.auth) {
           this.props.history.push('/');
         }
@@ -41,5 +44,5 @@ export default ChildComponent => {
   function mapStateToProps(state) {
     return { auth: state.auth.authenticated };
   }
-  return connect(mapStateToProps, {isAuthenticated})(ComposedComponent);
+  return connect(mapStateToProps, {isAuthenticated})(withRouter(ComposedComponent));
 };

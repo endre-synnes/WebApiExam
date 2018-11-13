@@ -66,6 +66,13 @@ function emptyQueue() {
   return queue.length;
 }
 
+function removeUser(value) {
+  const index = queue.indexOf(value);
+  if (index > -1) {
+    queue.splice(index, 1);
+  }
+}
+
 function getOrganizer(){
   if (queue.length > 0) {
     return queue[0];
@@ -74,5 +81,5 @@ function getOrganizer(){
 }
 
 
-module.exports = {addUser, size, takeUser, hasUser, getOrganizer, getQueue, emptyQueue};
+module.exports = {addUser, size, takeUser, hasUser, getOrganizer, getQueue, removeUser, emptyQueue};
 

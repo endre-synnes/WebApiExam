@@ -34,6 +34,21 @@ router.post('/api/game', (req, res) => {
   res.status(201).json({isOrganizer: false});
 });
 
+router.delete('/api/leaveGame', (req, res) => {
+  if (!req.user) {
+    res.status(401).send();
+    return;
+  }
+  if (PlayerQueue.getOrganizer() === req.user.id){
+    PlayerQueue.emptyQueue();
+    res.status(204);
+    return;
+  }
+
+  PlayerQueue.removeUser(req.user.id);
+  res.status(204).send();
+});
+
 router.post('/api/start', (req, res) => {
   if (!req.user) {
     res.status(401).send();

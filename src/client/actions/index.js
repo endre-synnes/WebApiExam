@@ -72,20 +72,20 @@ export const signout = (values, callback) => async dispatch => {
   }
 };
 
-export const isAuthenticated = (values, callback) => async dispatch => {
+export const isAuthenticated = (callback) => async dispatch => {
   try {
     const response = await axios.get(
       '/api/user'
     );
 
-    await dispatch({ type: AUTH_USER, payload: response.data.username });
+    dispatch({ type: AUTH_USER, payload: response.data.username });
     localStorage.setItem('username', response.data.username);
     callback();
 
   } catch (e) {
     console.log("error while getting is authenticated");
     localStorage.removeItem('username');
-    await dispatch({ type: AUTH_ERROR, payload: 'User Not Authenticated' });
+    dispatch({ type: AUTH_ERROR, payload: 'User Not Authenticated' });
     callback();
 
     return {

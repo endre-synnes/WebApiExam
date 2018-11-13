@@ -19,6 +19,7 @@ class Lobby extends Component {
       errorMsg: null,
       isOrganizer: false,
       gameFinished: false,
+      quizAnswered: false,
       winner: null
     };
   }
@@ -27,6 +28,7 @@ class Lobby extends Component {
   componentDidMount() {
     this.connectToGame = this.connectToGame.bind(this);
     this.makeGuess = this.makeGuess.bind(this);
+    this.leaveGame = this.leaveGame.bind(this);
     this.socket = openSocket(window.location.origin);
 
     this.socket.on("update",  (dto) => {
@@ -47,6 +49,7 @@ class Lobby extends Component {
       console.log(data);
 
       this.setState({
+        quizAnswered: false,
         gameId: data.gameId,
         gameState: data.gameState,
         players: data.players,
@@ -58,8 +61,6 @@ class Lobby extends Component {
       this.socket.on('disconnect', () => {
         this.setState({errorMsg: "Disconnected from Server."});
       });
-
-
 
     });
 
@@ -170,6 +171,9 @@ class Lobby extends Component {
         <button onClick={() => this.makeGuess(2)}>{this.state.gameState.alternatives[2]}</button>
         <button onClick={() => this.makeGuess(3)}>{this.state.gameState.alternatives[3]}</button>
         </div>
+    }
+    else if (this.state.quizAnswered) {
+      return <div>Waiting for others ...</div>
     } else if (this.state.gameFinished) {
       return <div>Good game!</div>
     }
@@ -218,12 +222,32 @@ class Lobby extends Component {
         answerIndex: index,
         gameId: this.state.gameId
       });
+      this.setState({
+        quizAnswered: true
+      })
     }
   }
 
   componentWillUnmount() {
     console.log("logging out of socket");
+    this.leaveGame();
     this.socket.disconnect();
+  }
+
+  async leaveGame(){
+    const url = "/api/leaveGame";
+
+    let response;
+
+    try {
+      response = await fetch(url, {
+        method: "delete"
+      });
+
+    } catch (err) {
+      this.setState({errorMsg: "Failed to connect to server: " + err});
+      return;
+    }
   }
 }
 

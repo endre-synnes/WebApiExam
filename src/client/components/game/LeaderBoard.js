@@ -16,5 +16,4 @@ class LeaderBoard extends Component {
     )
   }
 }
-
 export default requireAuth(LeaderBoard);

@@ -8,4 +8,5 @@ export default ({ children }) => {
       {children}
     </div>
   );
-}
+};
+
