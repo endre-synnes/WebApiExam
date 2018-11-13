@@ -95,4 +95,28 @@ router.get("/api/user", (req, res) => {
   res.status(200).json({username: req.user.username});
 });
 
+router.get('/api/leaderboard', (req, res) => {
+  if(! req.user){
+    res.status(401).send();
+    return;
+  }
+
+  console.log("in leaderboard");
+
+  User.find(function (err, users) {
+    let leaders = users.map(u => {
+      return {
+        "username": u.username,
+        "wins": u.wins
+      }
+    });
+
+    leaders = leaders.sort(function (a, b) {
+      return b.wins - a.wins;
+    });
+
+    res.status(200).json({users: leaders})
+  })
+});
+
 module.exports = router;

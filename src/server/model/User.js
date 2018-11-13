@@ -54,6 +54,10 @@ module.exports.comparePassword = (candidatePassword, hash, callback) => {
   });
 };
 
+module.exports.findLeaders = (callback) => {
+  User.find({}, callback)
+};
+
 module.exports.updateWins = (id, callback) => {
   User.findByIdAndUpdate(
     id,
