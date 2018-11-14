@@ -5,6 +5,11 @@
       "alternatives" : ["1935", "1945", "1939", "1940"],
       "correctIndex": 2,
       "category": "History"
+    },{
+      "question" : "Who was the first president of the USA?",
+      "alternatives" : ["George Washington", "Abraham Lincoln", "Georg W. Bush", "Richard Nixon"],
+      "correctIndex": 0,
+      "category": "History"
     },
     {
       "question" : "How many oscars did the Titanic movie got?",
@@ -13,10 +18,43 @@
       "category": "Movie / TV"
     },
     {
+      "question" : "What is the house number of the Simpsons?",
+      "alternatives" : ["101", "123", "742", "839"],
+      "correctIndex": 2,
+      "category": "Movie / TV"
+    },
+    {
       "question" : "In what year was Google launched on the web?",
       "alternatives" : ["1999", "1998", "1994", "2000"],
       "correctIndex": 1,
       "category": "Informatics"
+    },
+    {
+      "question" : "In computing what is Ram short for?",
+      "alternatives" : ["Readable Access Memory", "Reachable Alien Money", "Rewritable Account Memory", "Random Access Memory"],
+      "correctIndex": 3,
+      "category": "Informatics"
+    },
+    {
+      "question" : "What's the name of the explosive that gave the Lannisters the edge in the Battle of Blackwater?",
+      "alternatives" : ["Wildfire", "Dragonfire", "Godfire", "Pantsonfire"],
+      "correctIndex": 0,
+      "category": "Game of Thrones"
+    },{
+      "question" : "What's the name of Lysa Arryn's way-too-old-to-be-nursing son?",
+      "alternatives" : ["Edmore", "Hoster", "Robin", "Nedwell"],
+      "correctIndex": 2,
+      "category": "Game of Thrones"
+    },{
+      "question" : "What is the name of Jon Snow's Direwolf?",
+      "alternatives" : ["Grey Wind", "Graham", "Ghost", "Gargamel"],
+      "correctIndex": 2,
+      "category": "Game of Thrones"
+    },{
+      "question" : "Which Lannister song signalled doom at the Red Wedding?",
+      "alternatives" : ["The Rains Of Castermere", "A Golden Crown", "The Assassin's Dagger", "Tales Of Topographic Oceans"],
+      "correctIndex": 0,
+      "category": "Game of Thrones"
     }
   ]
 }

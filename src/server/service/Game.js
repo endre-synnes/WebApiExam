@@ -12,10 +12,11 @@ const User = require("../model/User");
 class Game {
 
 
-  constructor(playerIds, callbackWhenFinished, quizzes){
+  constructor(playerIds, callbackWhenFinished, quizzes, category){
 
     this.userIdToCurrentScore = new Map();
 
+    this.category = category;
     this.nameOfWinner = null;
     this.playerIds = playerIds;
     this.counter = 0;
@@ -217,7 +218,8 @@ class Game {
         players: this.playerIds,
         gameFinished: this.gameFinished,
         winner: this.nameOfWinner,
-        timer: this.millisecondsTimer
+        timer: this.millisecondsTimer,
+        category: this.category
       }
     };
 

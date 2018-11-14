@@ -28,16 +28,27 @@ function startMatch(playerIds){
       return;
     }
 
-      const game = new Game(playerIds, deleteMatch, quizzes);
-      console.log("Starting a new game id : " + game.gameId);
+    if (quizzes.length === 0) {
+      return;
+    }
 
-      playerIds.forEach(id => userIdToGame.set(id, game));
-      gameIdToGame.set(game.gameId, game);
+    let randomQuizCategory = quizzes[getRandomQuizNumber(quizzes.length)].category;
+    let quizzesToPlay = quizzes.filter(quiz => quiz.category === randomQuizCategory);
+
+    const game = new Game(playerIds, deleteMatch, quizzesToPlay, randomQuizCategory);
+    console.log("Starting a new game id : " + game.gameId);
+
+    playerIds.forEach(id => userIdToGame.set(id, game));
+    gameIdToGame.set(game.gameId, game);
     }
 
   );
 
 
+}
+
+function getRandomQuizNumber(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }
 
 function deleteMatch(gameId){

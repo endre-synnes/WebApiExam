@@ -23,7 +23,8 @@ class Lobby extends Component {
       winner: null,
       timer: null,
       gameStarted: false,
-      newQuestion: false
+      newQuestion: false,
+      category: null
     };
   }
 
@@ -62,7 +63,8 @@ class Lobby extends Component {
         winner: data.winner,
         timer: data.timer,
         gameStarted: true,
-        newQuestion: true
+        newQuestion: true,
+        category: data.category
       });
       this.socket.on('disconnect', () => {
         this.setState({errorMsg: "Disconnected from Server."});
@@ -76,17 +78,20 @@ class Lobby extends Component {
   }
 
   async connectToGame(){
-    // this.setState({
-    //   gameId: null,
-    //   gameState: null,
-    //   players: null,
-    //   errorMsg: null,
-    //   isOrganizer: false,
-    //   gameFinished: false,
-    //   winner: null,
-    //   timer: null,
-    //   gameStarted: false
-    // });
+    this.setState({
+      gameId: null,
+      gameState: null,
+      players: null,
+      errorMsg: null,
+      isOrganizer: false,
+      gameFinished: false,
+      quizAnswered: false,
+      winner: null,
+      timer: null,
+      gameStarted: false,
+      newQuestion: false,
+      category: null
+    });
 
     const url = "/api/game";
     let response;
@@ -186,6 +191,7 @@ class Lobby extends Component {
   renderQuiz(){
     if (this.state.gameState && !this.state.gameFinished) {
       return <div>
+        <h2>Category: {this.state.category}</h2>
         <h4>{this.state.gameState.question}</h4>
         <button onClick={() => this.makeGuess(0)} className="btn">{this.state.gameState.alternatives[0]}</button>
         <button onClick={() => this.makeGuess(1)} className="btn">{this.state.gameState.alternatives[1]}</button>
