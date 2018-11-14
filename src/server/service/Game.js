@@ -216,7 +216,8 @@ class Game {
         gameState: this.gameState.returnDto(),
         players: this.playerIds,
         gameFinished: this.gameFinished,
-        winner: this.nameOfWinner
+        winner: this.nameOfWinner,
+        timer: this.millisecondsTimer
       }
     };
 

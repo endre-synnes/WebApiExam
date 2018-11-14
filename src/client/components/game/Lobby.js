@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {getWsToken} from "../../actions"
 import openSocket from 'socket.io-client';
 import {Link} from "react-router-dom";
-
+import Countdown from "react-countdown-now";
 
 //import BoardState from "../../../shared/GameState";
 
@@ -20,7 +20,10 @@ class Lobby extends Component {
       isOrganizer: false,
       gameFinished: false,
       quizAnswered: false,
-      winner: null
+      winner: null,
+      timer: null,
+      gameStarted: false,
+      newQuestion: false
     };
   }
 
@@ -29,6 +32,7 @@ class Lobby extends Component {
     this.makeGuess = this.makeGuess.bind(this);
     this.leaveGame = this.leaveGame.bind(this);
     this.renderError = this.renderError.bind(this);
+    this.startTimer = this.startTimer.bind(this);
     this.socket = openSocket(window.location.origin);
 
     this.socket.on("update",  (dto) => {
@@ -55,9 +59,11 @@ class Lobby extends Component {
         players: data.players,
         isOrganizer: data.isOrganizer,
         gameFinished: data.gameFinished,
-        winner: data.winner
+        winner: data.winner,
+        timer: data.timer,
+        gameStarted: true,
+        newQuestion: true
       });
-
       this.socket.on('disconnect', () => {
         this.setState({errorMsg: "Disconnected from Server."});
       });
@@ -70,15 +76,17 @@ class Lobby extends Component {
   }
 
   async connectToGame(){
-    this.setState({
-      gameId: null,
-      gameState: null,
-      players: null,
-      errorMsg: null,
-      isOrganizer: false,
-      gameFinished: false,
-      winner: null
-    });
+    // this.setState({
+    //   gameId: null,
+    //   gameState: null,
+    //   players: null,
+    //   errorMsg: null,
+    //   isOrganizer: false,
+    //   gameFinished: false,
+    //   winner: null,
+    //   timer: null,
+    //   gameStarted: false
+    // });
 
     const url = "/api/game";
     let response;
@@ -104,6 +112,24 @@ class Lobby extends Component {
     const payload = await response.json();
     console.log(payload);
     this.setState({isOrganizer: payload.isOrganizer});
+  }
+
+  startTimer(){
+
+    console.log(this.state.gameStarted);
+    console.log(this.state.gameFinished);
+    console.log(this.state.timer);
+    if (this.state.gameStarted && !this.state.gameFinished && this.state.timer && !this.state.quizAnswered) {
+      console.log("should render timer");
+      return (
+        <div>
+          <h3><Countdown date={Date.now() + this.state.timer}/></h3>
+        </div>
+      );
+    } else if (this.state.gameStarted && !this.state.gameFinished && this.state.quizAnswered) {
+        return <div>Waiting for next question...</div>;
+    }
+
   }
 
   async startGame(){
@@ -144,6 +170,7 @@ class Lobby extends Component {
         {this.renderStartGameView()}
         {this.renderQuiz()}
         {this.renderError()}
+        {this.startTimer()}
       </div>
     );
   };
@@ -196,14 +223,15 @@ class Lobby extends Component {
   }
 
   makeGuess(index){
-    if (this.state.gameState) {
+    if (this.state.gameState && !this.state.quizAnswered) {
       this.socket.emit('insertion', {
         questionId: this.state.gameState.questionId,
         answerIndex: index,
         gameId: this.state.gameId
       });
       this.setState({
-        quizAnswered: true
+        quizAnswered: true,
+        newQuestion: false
       })
     }
   }
