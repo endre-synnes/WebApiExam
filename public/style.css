@@ -6,7 +6,25 @@ body {
   text-align: center;
   position: relative;
   font-size: 1em;
+  min-height: 100%;
 }
+
+#root {
+  min-height: 100vh;
+}
+
+#content {
+  min-height: 100vh;
+}
+
+.footer {
+  bottom: 0;
+  position: absolute;
+  height: 100px;
+  margin: auto;
+  width: 100%;
+}
+
 .headerBar {
   margin-top: 30px;
 }
