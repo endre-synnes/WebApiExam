@@ -8,6 +8,7 @@
     "dev": "webpack --mode development && npm run start",
     "cors": "webpack --mode development && CORS=true node src/server/server.js",
     "build": "webpack --mode production",
+    "docker" : "NODE_ENV=docker node src/server/server.js",
     "start": "NODE_ENV=dev node src/server/server.js"
   },
   "author": "Endre Synnes",
