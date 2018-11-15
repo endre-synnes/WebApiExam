@@ -51,6 +51,7 @@ app.use(session({
     saveUninitialized: false
 }));
 
+
 //needed to server static files, like HTML, CSS and JS.
 app.use(express.static('public'));
 app.use(passport.initialize());
