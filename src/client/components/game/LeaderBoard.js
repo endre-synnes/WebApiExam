@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import requireAuth from "./../requireAuth";
+var ReactBsTable  = require('react-bootstrap-table');
+var BootstrapTable = ReactBsTable.BootstrapTable;
+var TableHeaderColumn = ReactBsTable.TableHeaderColumn;
 
 class LeaderBoard extends Component {
 
@@ -8,13 +11,13 @@ class LeaderBoard extends Component {
     super(props);
 
     this.state = {
-      leaders: null
+      leaders: null,
+      errorMsg: null
     }
   }
 
   componentDidMount(){
-    this.getLeaders = this.getLeaders.bind(this)
-
+    this.getLeaders = this.getLeaders.bind(this);
     this.getLeaders();
   }
 
@@ -39,16 +42,19 @@ class LeaderBoard extends Component {
 
   render() {
     if (this.state.leaders) {
-      const listItems = this.state.leaders.users.map((d) => <li key={d.username}>{d.username}  {d.wins}</li>);
       return(
         <div>
-          {listItems}
+          <BootstrapTable data={this.state.leaders.users} striped hover>
+            <TableHeaderColumn isKey dataField='username'>Username</TableHeaderColumn>
+            <TableHeaderColumn dataField='wins'>Number of wins</TableHeaderColumn>
+          </BootstrapTable>
         </div>
       )
     } else {
       return (
         <div>
           <h2>No leaders</h2>
+          <h5>{this.state.errorMsg}</h5>
         </div>
       )
     }

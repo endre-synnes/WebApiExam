@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import {isAuthenticated} from '../actions';
 import { withRouter } from "react-router-dom";
 
+/*
+    INFO:
+    This file is inspired by The Udemy course: Advanced React and Redux: 2018 Edition (Made by Stephen Grider)
+ */
+
 export default ChildComponent => {
   class ComposedComponent extends Component {
     // Our component just got rendered
@@ -18,15 +23,6 @@ export default ChildComponent => {
 
 
     shouldNavigateAway() {
-      // this.props.isAuthenticated(() => {
-      //   console.log("in callback");
-      //   console.log(this.props.auth);
-      //   if (!this.props.auth) {
-      //     console.log(this.props.auth);
-      //     this.props.history.push('/');
-      //   }
-      // });
-
       this.props.isAuthenticated( () => {
         if (!this.props.auth) {
           this.props.history.push('/');

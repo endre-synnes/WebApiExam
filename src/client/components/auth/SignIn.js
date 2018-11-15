@@ -18,6 +18,7 @@ class SignIn extends Component {
     return (
       <div>
         <h2>Enter credentials to Sign In</h2>
+        <br/>
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <fieldset>
             <label>Email</label>
@@ -28,6 +29,7 @@ class SignIn extends Component {
               autoComplete="none"
             />
           </fieldset>
+          <br/>
           <fieldset>
             <label>Password</label>
             <Field
@@ -37,6 +39,7 @@ class SignIn extends Component {
               autoComplete="none"
             />
           </fieldset>
+          <br/>
           <button className="btn">Sign In!</button>
         </form>
       </div>
