@@ -83,12 +83,11 @@ class Lobby extends Component {
         return;
       }
 
-      if (conditions.canStart) {
-        this.setState({
-          canStart: true,
-          playerCount: conditions.playerCount
-        })
-      }
+      this.setState({
+        canStart: conditions.canStart,
+        playerCount: conditions.playerCount
+      })
+
     });
 
     this.socket.on("gameCanceled", (dto) => {
@@ -186,6 +185,7 @@ class Lobby extends Component {
       if (this.state.canStart) {
         return <div>
           <h4>Start a new game!</h4>
+          <p>Number of players in queue: {this.state.playerCount}</p>
           <button onClick={this.startGame} className="btn btn-dark">Start new Game</button>
         </div>
       } else {

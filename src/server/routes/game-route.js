@@ -48,7 +48,6 @@ router.delete('/api/leaveGame', (req, res) => {
     return;
   }
 
-  PlayerQueue.removeUser(req.user.id);
   res.status(204).send();
 });
 

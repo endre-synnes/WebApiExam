@@ -16,27 +16,30 @@ class SignIn extends Component {
     console.log(this.props.authenticated);
 
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-        <fieldset>
-          <label>Email</label>
-          <Field
-            name="username"
-            type="text"
-            component="input"
-            autoComplete="none"
-          />
-        </fieldset>
-        <fieldset>
-          <label>Password</label>
-          <Field
-            name="password"
-            type="password"
-            component="input"
-            autoComplete="none"
-          />
-        </fieldset>
-        <button className="btn">Sign In!</button>
-      </form>
+      <div>
+        <h2>Enter credentials to Sign In</h2>
+        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+          <fieldset>
+            <label>Email</label>
+            <Field
+              name="username"
+              type="text"
+              component="input"
+              autoComplete="none"
+            />
+          </fieldset>
+          <fieldset>
+            <label>Password</label>
+            <Field
+              name="password"
+              type="password"
+              component="input"
+              autoComplete="none"
+            />
+          </fieldset>
+          <button className="btn">Sign In!</button>
+        </form>
+      </div>
     );
   }
 }
