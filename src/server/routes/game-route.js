@@ -47,21 +47,6 @@ router.delete('/api/leaveGame', (req, res) => {
     res.status(401).send();
     return;
   }
-  if (PlayerQueue.getOrganizer() === req.user.id){
-    let queue = PlayerQueue.getQueue();
-
-    queue.forEach( (user) => {
-      const socket = ActivePlayers.getSocket(user);
-      socket.emit("gameCanceled", {
-        canceled: true ,
-        message : "Organizer left the game."
-      });
-    });
-
-    PlayerQueue.emptyQueue();
-    res.status(204);
-    return;
-  }
 
   PlayerQueue.removeUser(req.user.id);
   res.status(204).send();

@@ -24,7 +24,8 @@ class Lobby extends Component {
       newQuestion: false,
       category: null,
       canStart: false,
-      playerCount: null
+      playerCount: null,
+      gameCanceled: false
     };
   }
 
@@ -88,6 +89,18 @@ class Lobby extends Component {
           playerCount: conditions.playerCount
         })
       }
+    });
+
+    this.socket.on("gameCanceled", (dto) => {
+      if (dto === null || dto === undefined) {
+        this.setState({errorMsg: "Invalid response from server."});
+        return;
+      }
+
+      this.setState({
+        gameCanceled : dto.canceled,
+        errorMsg: dto.message
+      })
     })
   }
 
@@ -106,7 +119,8 @@ class Lobby extends Component {
       newQuestion: false,
       category: null,
       canStart: false,
-      playerCount: null
+      playerCount: null,
+      gameCanceled: false
     });
 
     const url = "/api/game";
@@ -136,12 +150,7 @@ class Lobby extends Component {
   }
 
   startTimer(){
-
-    console.log(this.state.gameStarted);
-    console.log(this.state.gameFinished);
-    console.log(this.state.timer);
     if (this.state.gameStarted && !this.state.gameFinished && this.state.timer && !this.state.quizAnswered) {
-      console.log("should render timer");
       return (
         <div>
           <h3><Countdown date={Date.now() + this.state.timer}/></h3>
@@ -184,9 +193,14 @@ class Lobby extends Component {
           <h4>Waiting for enough players to start the game!</h4>
         </div>
       }
-    } else if (!this.state.isOrganizer && !this.state.gameState) {
+    } else if (!this.state.isOrganizer && !this.state.gameState && !this.state.gameCanceled) {
       return <div>
         <h4>Waiting for organiser to start the game...</h4>
+      </div>
+    } else if (this.state.gameCanceled) {
+      return <div>
+        <Link to="/" className="btn btn-dark">Exit</Link>
+        <button onClick={this.connectToGame} className="btn btn-dark">New Game</button>
       </div>
     }
   }
@@ -194,9 +208,9 @@ class Lobby extends Component {
   render() {
     return (
       <div>
+        {this.renderError()}
         {this.renderStartGameView()}
         {this.renderQuiz()}
-        {this.renderError()}
         {this.startTimer()}
       </div>
     );
@@ -205,7 +219,7 @@ class Lobby extends Component {
   renderError(){
     if (this.state.errorMsg) {
       return <div>
-        <h5>{this.state.errorMsg}</h5>
+        <h3>{this.state.errorMsg}</h3>
       </div>
     }
   }
@@ -213,8 +227,8 @@ class Lobby extends Component {
   renderQuiz(){
     if (this.state.gameState && !this.state.gameFinished) {
       return <div>
-        <h2>Category: {this.state.category}</h2>
         <h4>{this.state.gameState.question}</h4>
+        <p>Category: {this.state.category}</p>
         <button onClick={() => this.makeGuess(0)} className="btn">{this.state.gameState.alternatives[0]}</button>
         <button onClick={() => this.makeGuess(1)} className="btn">{this.state.gameState.alternatives[1]}</button>
         <button onClick={() => this.makeGuess(2)} className="btn">{this.state.gameState.alternatives[2]}</button>

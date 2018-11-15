@@ -64,6 +64,22 @@ const start = (server) => {
 
             const userId = ActivePlayers.getUser(socket.id);
 
+            if (PlayerQueue.getOrganizer() === userId) {
+              let queue = PlayerQueue.getQueue();
+              console.log("organizer leaving");
+              console.log(`queue size: ${queue.length}`);
+              queue.forEach( (user) => {
+                const socket = ActivePlayers.getSocket(user);
+                socket.emit("gameCanceled", {
+                  canceled: true ,
+                  message : "Organizer left the game."
+                });
+              });
+              PlayerQueue.emptyQueue();
+            } else {
+              PlayerQueue.removeUser(userId);
+            }
+
             ActivePlayers.removeSocket(socket.id);
 
             /*
@@ -73,7 +89,6 @@ const start = (server) => {
                 the connection when it sees that it is losing a match
              */
             OngoingMatches.forfeit(userId);
-            PlayerQueue.removeUser(userId);
 
             console.log("User '"+userId+"' is disconnected.");
         });
