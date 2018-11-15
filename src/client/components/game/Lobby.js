@@ -6,8 +6,6 @@ import openSocket from 'socket.io-client';
 import {Link} from "react-router-dom";
 import Countdown from "react-countdown-now";
 
-//import BoardState from "../../../shared/GameState";
-
 class Lobby extends Component {
   constructor(props){
     super(props);
@@ -24,7 +22,9 @@ class Lobby extends Component {
       timer: null,
       gameStarted: false,
       newQuestion: false,
-      category: null
+      category: null,
+      canStart: false,
+      playerCount: null
     };
   }
 
@@ -74,7 +74,21 @@ class Lobby extends Component {
 
     this.logInWithWebToken().then(
       this.connectToGame
-    )
+    );
+
+    this.socket.on("readyToStart", (conditions) => {
+      if (conditions === null || conditions === undefined) {
+        this.setState({errorMsg: "Invalid response from server."});
+        return;
+      }
+
+      if (conditions.canStart) {
+        this.setState({
+          canStart: true,
+          playerCount: conditions.playerCount
+        })
+      }
+    })
   }
 
   async connectToGame(){
@@ -90,7 +104,9 @@ class Lobby extends Component {
       timer: null,
       gameStarted: false,
       newQuestion: false,
-      category: null
+      category: null,
+      canStart: false,
+      playerCount: null
     });
 
     const url = "/api/game";
@@ -158,10 +174,16 @@ class Lobby extends Component {
 
   renderStartGameView(){
     if (this.state.isOrganizer && !this.state.gameState) {
-      return <div>
-        <h4>Start a new game!</h4>
-        <button onClick={this.startGame} className="btn btn-dark">Start new Game</button>
-      </div>
+      if (this.state.canStart) {
+        return <div>
+          <h4>Start a new game!</h4>
+          <button onClick={this.startGame} className="btn btn-dark">Start new Game</button>
+        </div>
+      } else {
+        return <div>
+          <h4>Waiting for enough players to start the game!</h4>
+        </div>
+      }
     } else if (!this.state.isOrganizer && !this.state.gameState) {
       return <div>
         <h4>Waiting for organiser to start the game...</h4>

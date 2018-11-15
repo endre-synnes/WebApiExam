@@ -37,28 +37,14 @@ if(process.env.CORS){
     app.use(cors());
 
     /*
-        Even if we allow requests from all origins with
-        "Access-Control-Allow-Origin: *"
-        (which is what cors() does), it would still block
-        requests with authentication (ie cookies).
-        Ie, cannot use wildcard * when dealing with authenticated
-        requests. We would have to explicitly state the origin (host + port),
-        eg, as we did in previous examples:
-
         app.use(cors({
             origin: 'http://localhost:1234'
         }));
      */
 }
 
-//to handle JSON payloads
 app.use(bodyParser.json());
 
-/*
-    As we are going to use session-based authentication with
-    cookies, we need to tell Express to create new sessions.
-    The cookie will store user info, encrypted.
- */
 app.use(session({
     secret: 'a secret used to encrypt the session cookies',
     resave: false,

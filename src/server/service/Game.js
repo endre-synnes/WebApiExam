@@ -15,6 +15,7 @@ class Game {
   constructor(playerIds, callbackWhenFinished, quizzes, category){
 
     this.userIdToCurrentScore = new Map();
+    this.userIdToQuestion = [];
 
     this.category = category;
     this.nameOfWinner = null;
@@ -127,27 +128,13 @@ class Game {
         return;
       }
 
-      /*
-          WARNING: the checks above are a starting point, but they are
-          not sufficient. For example, we are not checking if the position
-          is valid.
-          You might think that, if the code in the frontend (ie bundle.js) is
-          bug-free, then that should not be a problem.
-          But a logged in user could craft messages manually with a program.
-
-          This is a issue. For example, this game is NOT secure, even if we
-          are using authentication on the WS socket channels.
-          For example, it can be "easy" for a user to CHEAT.
-          When a user sends its move via the socket, it can craft immediately
-          a second message representing the move of the opponent, by just
-          using "counter+1" in data.counter.
-
-          This problem can be fixed here by checking if the move for action with
-          index "counter" is actually expected to come from this user's socket and
-          not the opponent.
-       */
+      if(this.userIdToQuestion.includes(playerId)){
+        socket.emit("update", {error: "You have already answered this question!!"});
+        return;
+      }
 
       if (!this.gameFinished && answerIndex === this.currentQuestion.correctIndex) {
+        this.userIdToQuestion.push(playerId);
         console.log("correct answer!!");
         let endTime = new Date();
         let maxScore = 1000;
@@ -164,6 +151,7 @@ class Game {
   nextQuestion(quizzes){
     this.currentQuizTimer = new Date();
     this.counter += 1;
+    this.userIdToQuestion = [];
 
     if (this.counter >= this.quizzes.length) {
       this.endGame();

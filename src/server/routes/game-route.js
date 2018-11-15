@@ -2,9 +2,8 @@ const express = require("express");
 const PlayerQueue = require("../service/PlayerQueue");
 const ActivePLayers = require("../service/ActivePlayers");
 const OngoingMatches = require("../service/OngoingMatches");
+const ActivePlayers = require("../service/ActivePlayers");
 const router = express.Router();
-
-//TODO implementer endepunkt for å lage quiz
 
 router.post('/api/game', (req, res) => {
 
@@ -14,23 +13,32 @@ router.post('/api/game', (req, res) => {
   }
 
   if (PlayerQueue.hasUser(req.user.id)) {
+    console.log("already in queue");
     //already in the queue, nothing to do
     res.status(204).send();
     return;
   }
 
   OngoingMatches.forfeit(req.user.id);
-
   if (PlayerQueue.size() > 0) {
     console.log(`Number of players already in queue: ${PlayerQueue.size()}` );
   }
 
   PlayerQueue.addUser(req.user.id);
+  let organizer = PlayerQueue.getOrganizer();
 
-  if (PlayerQueue.getOrganizer() === req.user.id){
+  if (organizer === req.user.id){
     res.status(201).json({isOrganizer: true});
     return;
   }
+
+  // Sending update to organizer that he/she can start the game
+  const socket = ActivePlayers.getSocket(organizer);
+  socket.emit("readyToStart", {
+    canStart: true ,
+    playerCount : PlayerQueue.size()
+  });
+
   res.status(201).json({isOrganizer: false});
 });
 
@@ -40,6 +48,16 @@ router.delete('/api/leaveGame', (req, res) => {
     return;
   }
   if (PlayerQueue.getOrganizer() === req.user.id){
+    let queue = PlayerQueue.getQueue();
+
+    queue.forEach( (user) => {
+      const socket = ActivePlayers.getSocket(user);
+      socket.emit("gameCanceled", {
+        canceled: true ,
+        message : "Organizer left the game."
+      });
+    });
+
     PlayerQueue.emptyQueue();
     res.status(204);
     return;
@@ -62,20 +80,10 @@ router.post('/api/start', (req, res) => {
   }
 
   queue = PlayerQueue.getQueue();
-  console.log("queue:");
-  console.log(queue);
-  console.log("----------------");
-
   const activePlayers = queue.filter(active => ActivePLayers.isActive(active));
 
-  console.log("active players to join this game:");
-  activePlayers.forEach(e => console.log(e));
-  console.log("-------------------");
-
   OngoingMatches.startMatch(activePlayers);
-
   PlayerQueue.emptyQueue();
-
   res.status(201).json({started: true});
 });
 
