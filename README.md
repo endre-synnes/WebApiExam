@@ -7,15 +7,19 @@
 #### Docker / local
 
 1. Open Docker on your machine.
+
 2. In a terminal, navigate to the root directory of this project.
+
 3. run the following command: `docker-compose up -d`
+    Now docker will run the setup of this project and install dependencies,
+    as well as create the necessary docker images and start docker containers serving this application.
 
-Now docker will run the setup of this project and install dependencies,
-as well as create the necessary docker images and start docker containers serving this application.
+4. After docker is finished with the setup, the application will be accessible at: `localhost:8080`. 
+    There is no default users so you need to sign up before you can start a game. 
+    And sign up with a player two on a second web browser to be able to start a game.
 
-After docker is finished with the setup, the application will be accessible at: `localhost:8080`. 
-There is no default users so you need to sign up before you can start a game. 
-And sign up with a player two on a second web browser to be able to start a game.
+5. To stop the application you can run the following command: `docker-compose down`, or to also clean all docker containers and images: 
+    `docker-compose -f docker-compose.yml down --rmi all`.
 
 #### Herpoku 
 The application is already running on [Heroku](https://afternoon-everglades-27665.herokuapp.com).
