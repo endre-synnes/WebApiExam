@@ -9,7 +9,7 @@ class Header extends Component {
     if(this.props.authenticated){
       return(
         <Nav>
-          <NavItem componentClass={Link} href="/lobby" to="/lobby">Game lobby</NavItem>
+          <NavItem componentClass={Link} href="/lobby" to="/lobby">Game Lobby</NavItem>
           <NavItem componentClass={Link} href="/leaderboard" to="/leaderboard">Leaderboard</NavItem>
         </Nav>
       )

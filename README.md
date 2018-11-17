@@ -12,7 +12,9 @@
 
 3. run the following command: `docker-compose up -d`
     Now docker will run the setup of this project and install dependencies,
-    as well as create the necessary docker images and start docker containers serving this application.
+    as well as create the necessary docker images and start docker containers serving this application. 
+    Note: If are running windows you may have to restart Docker and run `docker-compose up -d` [again](https://github.com/docker/for-win/issues/573#issuecomment-301513210) 
+    due to a [bug](https://github.com/docker/for-win/issues/573) in the monggoDB container.
 
 4. After docker is finished with the setup, the application will be accessible at: `localhost:8080`. 
     There is no default users so you need to sign up before you can start a game. 
