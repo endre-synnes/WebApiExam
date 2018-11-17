@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { NavLink } from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import { connect } from 'react-redux';
 import {Nav, Navbar, NavItem} from "react-bootstrap";
 import requireAuth from "./requireAuth";
@@ -9,12 +9,8 @@ class Header extends Component {
     if(this.props.authenticated){
       return(
         <Nav>
-          <NavItem eventKey={1}>
-            <NavLink to={"/lobby"} style={{ textDecoration: 'none'}}>Lobby</NavLink>
-          </NavItem>
-          <NavItem eventKey={2}>
-            <NavLink to={"/leaderboard"} style={{ textDecoration: 'none'}}>Leaderboard</NavLink>
-          </NavItem>
+          <NavItem componentClass={Link} href="/lobby" to="/lobby">Game lobby</NavItem>
+          <NavItem componentClass={Link} href="/leaderboard" to="/leaderboard">Leaderboard</NavItem>
         </Nav>
       )
 
@@ -25,20 +21,14 @@ class Header extends Component {
     if(this.props.authenticated){
       return (
         <Nav pullRight>
-          <NavItem eventKey={3} href="#">
-            <NavLink to={"/signout"} style={{ textDecoration: 'none' }}>Sign out</NavLink>
-          </NavItem>
+          <NavItem componentClass={Link} href="/signout" to="/signout">Sign out</NavItem>
         </Nav>
       )
     } else {
       return (
         <Nav pullRight>
-          <NavItem eventKey={3}>
-            <NavLink to={"/signup"} style={{ textDecoration: 'none' }}>Sign up</NavLink>
-          </NavItem>
-          <NavItem eventKey={4} href="#">
-            <NavLink to={"/signin"} style={{ textDecoration: 'none' }}>Sign in</NavLink>
-          </NavItem>
+          <NavItem componentClass={Link} href="/signup" to="/signup">Sign up</NavItem>
+          <NavItem componentClass={Link} href="/signin" to="/signin">Sign in</NavItem>
         </Nav>
       )
     }
@@ -50,7 +40,7 @@ class Header extends Component {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <NavLink to="/">Quiz Game</NavLink>
+              <NavLink href="/" to="/">Quiz Game</NavLink>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>

@@ -286,7 +286,6 @@ class Lobby extends Component {
       });
 
     } catch (err) {
-      this.setState({errorMsg: "Failed to connect to server: " + err});
       return;
     }
   }

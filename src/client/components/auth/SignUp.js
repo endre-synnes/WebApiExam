@@ -42,6 +42,7 @@ class SignUp extends Component {
           <br/>
           <button className="btn">Sign Up!</button>
         </form>
+        <h4>{this.props.errorMessage}</h4>
       </div>
     );
   }

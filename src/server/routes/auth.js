@@ -15,6 +15,11 @@ const Tokens = require("../ws/tokens");
 // @dec Register user
 // @access Public
 router.post("/api/signup", (req, res) => {
+  if (req.body.username === undefined || req.body.password === undefined ||
+      req.body.username.length === 0  || req.body.password.length === 0 ){
+    return res.status(400).json({message: "You need to provide both username and password."});
+  }
+
   User.findOne({ username: req.body.username }).then(user => {
     if (user) {
       console.log("User name in use!");
@@ -51,7 +56,12 @@ router.post("/api/signup", (req, res) => {
 // @desc    Login User
 // @access  Public
 router.post('/api/login', passport.authenticate('local'), (req, res) => {
-    res.send({username: req.user.username});
+  if (req.user.username === undefined || req.user.password === undefined ||
+    req.user.username.length === 0  || req.user.password.length === 0 ){
+    return res.status(400).json({message: "You need to provide both username and password."});
+  }
+
+  res.send({username: req.user.username});
   }
 );
 

@@ -13,8 +13,6 @@ class SignIn extends Component {
 
   render() {
     const { handleSubmit } = this.props;
-    console.log(this.props.authenticated);
-
     return (
       <div>
         <h2>Enter credentials to Sign In</h2>
@@ -42,6 +40,7 @@ class SignIn extends Component {
           <br/>
           <button className="btn">Sign In!</button>
         </form>
+        <h4>{this.props.errorMessage}</h4>
       </div>
     );
   }

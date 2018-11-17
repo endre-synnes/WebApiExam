@@ -10,7 +10,7 @@ export const signup = (values, callback) => async dispatch => {
     );
 
     if (response.status !== 204) {
-      dispatch({ type: AUTH_ERROR, payload: "Error while creating user, status code: "+response.status });
+      dispatch({ type: AUTH_ERROR, payload: "Error while creating user, status code: "+ response.status });
     }
 
     dispatch({ type: AUTH_USER, payload: values.username });
@@ -29,47 +29,28 @@ export const signin = (values, callback) => async dispatch => {
       '/api/login',
       values
     );
-
-    // if (response.status !== 204) {
-    //   dispatch({ type: AUTH_ERROR, payload: "Error while creating user, status code: "+response.status });
-    // }
-    console.log(response.data);
-
     dispatch({ type: AUTH_USER, payload: response.data.username });
     localStorage.setItem('username', response.data.username);
     callback();
 
   } catch (e) {
-    dispatch({ type: AUTH_ERROR, payload: "Error while creating user" });
+    dispatch({ type: AUTH_ERROR, payload: "Error while logging in, incorrect username or password" });
   }
 };
 
 
 export const signout = (values, callback) => async dispatch => {
-
   try {
     const response = await axios.post(
       '/api/logout'
     );
 
-    dispatch({ type: AUTH_USER, payload: null });
-    localStorage.removeItem('username');
-    callback();
-
-    return {
-      type: AUTH_USER,
-      payload: ''
-    };
-
   } catch (e) {
-
-    dispatch({ type: AUTH_ERROR, payload: 'Error while logging out' });
-
-    return {
-      type: AUTH_ERROR,
-      payload: 'Error while logging out'
-    };
+    console.log("not connected to server");
   }
+  dispatch({ type: AUTH_USER, payload: null });
+  localStorage.removeItem('username');
+  callback();
 };
 
 export const isAuthenticated = (callback) => async dispatch => {
@@ -83,7 +64,6 @@ export const isAuthenticated = (callback) => async dispatch => {
     callback();
 
   } catch (e) {
-    console.log("error while getting is authenticated");
     localStorage.removeItem('username');
     dispatch({ type: AUTH_ERROR, payload: 'User Not Authenticated' });
     callback();
