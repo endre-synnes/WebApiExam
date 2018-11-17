@@ -8,12 +8,14 @@
 
 1. Open Docker on your machine.
 2. In a terminal, navigate to the root directory of this project.
-3. run the following command: `docker-compose up`
+3. run the following command: `docker-compose up -d`
 
 Now docker will run the setup of this project and install dependencies,
 as well as create the necessary docker images and start docker containers serving this application.
 
-After docker is finished with the setup, the application will be accessible at: `localhost:8080`
+After docker is finished with the setup, the application will be accessible at: `localhost:8080`. 
+There is no default users so you need to sign up before you can start a game. 
+And sign up with a player two on a second web browser to be able to start a game.
 
 #### Herpoku 
 The application is already running on [Heroku](https://afternoon-everglades-27665.herokuapp.com).
@@ -51,6 +53,49 @@ The file is called [requireAuth.js](./src/client/components/requireAuth.js).
 This files helps ensure that an user is in fact authentication, by calling the API on `componentDidMount`. 
 If the response is 401 you will not be able to view the component on this route and get redirected to the home page.
 
+
+<br/>
+
+## Code 
+The front end and backend is in the same root directory, witch make it possible to start the
+application as a single instance, as described above. Inside the root folder there is a source folder
+with sub folders for client (frontend) and server (backend).
+
+When you build this project the `bundle.js` file will be generated into the [public](./public) folder. The files here will
+then be served to the web browser.
+
+#### File Structure
+- client
+    - actions
+        - In this folder there is a files called [index.js](./src/client/actions/index.js). This file is an action-file that
+        does HTTP requests to the server and handle the response. This i a part of the redux implementation.
+    - components
+        - Here you can find all my React components. The middleware for authentication checks ([requireAuth.js](./src/client/components/requireAuth.js)) is also here. The most important here is the [Lobby.js](./src/client/components/game/Lobby.js) file.
+        This file handle the game it self on the client side.
+    - reducers
+        - The reduces is also a part om my redux implementation, he files here handle states of the application that is useful for many of my
+        react components
+    - index.html
+        - This file handle tings such as react routes etc.
+- server 
+    - config
+        - This folder contains configuration files for the server, such as mongodb url´s depending on the environment and passport logic for authentication of users.
+    - db
+        - This folder contains a file for database population. The [QuizSetup.js](./src/server/db/QuizSetup.js) reads quizzes from my [DefaultData.json](./src/server/DefaultData.json) file
+        and populate the database with dose quizzes. I have also implemented a check so there wil not be duplicates with the same question.
+    - model
+        - For the database i make use of the mongoose library to make it easier for database communication.
+        I have two files in this folder one for the [quizzes](./src/server/model/Quiz.js) and one for the [users](./src/server/model/User.js). The files function as database schemas, and contains functions for CRUD operations.
+    - routes
+        - The files here contains all the server endpoints where the client can communicate with the server. Such as authentication and routes for the game it self etc.
+    - ws
+        - This folder has two files that makes it possible to use WS tokens and handle the WebSocket connections.
+    - app.js
+        - This file is for server setup. This file does tings such as connecting to the database, making use of the routes and defining other settings as what file types to support for communication (json) and passport.
+    - defaultData.json
+        - Containing default quizzes.
+    - server.js
+        - Responsible for starting the server, deciding what port to use etc.
 
 <br/>
 

@@ -5,7 +5,6 @@ const session = require("express-session");
 const path = require('path');
 const cors = require('cors');
 const mongoose = require("mongoose");
-const morgan = require('morgan');
 require("./config/passport");
 const authRoute = require("./routes/auth");
 const gameRoute = require("./routes/game-route");
@@ -13,10 +12,6 @@ const quizSetup = require("./db/QuizSetup");
 
 const app = express();
 
-//Used for server logging
-//app.use(morgan("combined"));
-
-// Connecting to database
 const mongoURI = require("./config/keys").mongoURI;
 mongoose
   .connect(
@@ -26,21 +21,11 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
-//TODO implement so this does not call every time
 quizSetup.createQuizzesFromDefaultData();
-/*
-    We use an environment variable to decide if allowing all origins
-    or not
- */
+
 if(process.env.CORS){
     console.log("Using CORS to allow all origins");
     app.use(cors());
-
-    /*
-        app.use(cors({
-            origin: 'http://localhost:1234'
-        }));
-     */
 }
 
 app.use(bodyParser.json());
@@ -51,17 +36,13 @@ app.use(session({
     saveUninitialized: false
 }));
 
-
-//needed to server static files, like HTML, CSS and JS.
 app.use(express.static('public'));
 app.use(passport.initialize());
 app.use(passport.session());
 
-//--- Routes -----------
 app.use('/', authRoute);
 app.use('/', gameRoute);
 
-//handling 404
 app.use((req, res, next) => {
     res.sendFile(path.resolve(__dirname, '..', '..', 'public', 'index.html'));
 });

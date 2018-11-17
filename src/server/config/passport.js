@@ -14,14 +14,12 @@ passport.use(
 
       User.getUserByUsername(username,(err, user) => {
         if (err) {
-          console.log("Får du error?");
           console.log(err);
-
           throw err;
         }
 
         if (!user) {
-          return done(null, false, { message: "Unknown User" });
+          return done(null, false, { message: "Wrong username and password" });
         }
 
         User.comparePassword(password, user.password, (err, isMatch) => {
@@ -29,7 +27,7 @@ passport.use(
           if (isMatch) {
             return done(null, user);
           } else {
-            return done(null, false, { message: "Invalid password" });
+            return done(null, false, { message: "Wrong username and password" });
           }
         });
       });

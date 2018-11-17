@@ -94,26 +94,3 @@ export const isAuthenticated = (callback) => async dispatch => {
     };
   }
 };
-
-export const getWsToken = (callback) => async dispatch => {
-  try {
-
-    const response = await axios.post(
-      'api/wstoken'
-    );
-
-    // if (response.status !== 204) {
-    //   dispatch({ type: AUTH_ERROR, payload: "Error while creating user, status code: "+response.status });
-    // }
-
-    dispatch({ type: WS_TOKEN, payload: response.data.wstoken });
-    localStorage.setItem('wstoken', response.data.wstoken);
-
-    callback();
-    return response.data.wstoken;
-
-  } catch (e) {
-    dispatch({ type: AUTH_ERROR, payload: "Error while getting ws token" });
-    callback();
-  }
-};

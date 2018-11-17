@@ -10,17 +10,13 @@ import { withRouter } from "react-router-dom";
 
 export default ChildComponent => {
   class ComposedComponent extends Component {
-    // Our component just got rendered
     componentDidMount() {
       this.shouldNavigateAway();
     }
 
-    // Our component just got updated
     componentDidUpdate() {
       this.shouldNavigateAway();
     }
-
-
 
     shouldNavigateAway() {
       this.props.isAuthenticated( () => {
@@ -28,8 +24,6 @@ export default ChildComponent => {
           this.props.history.push('/');
         }
       });
-
-
     }
 
     render() {

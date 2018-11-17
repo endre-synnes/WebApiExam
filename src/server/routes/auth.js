@@ -15,9 +15,6 @@ const Tokens = require("../ws/tokens");
 // @dec Register user
 // @access Public
 router.post("/api/signup", (req, res) => {
-  //TODO implement validation of request body
-
-
   User.findOne({ username: req.body.username }).then(user => {
     if (user) {
       console.log("User name in use!");
@@ -59,7 +56,6 @@ router.post('/api/login', passport.authenticate('local'), (req, res) => {
 );
 
 router.post('/api/wstoken', function (req, res) {
-
   if(! req.user){
     res.status(401).send();
     return;
@@ -100,8 +96,6 @@ router.get('/api/leaderboard', (req, res) => {
     res.status(401).send();
     return;
   }
-
-  console.log("in leaderboard");
 
   User.find(function (err, users) {
     let leaders = users.map(u => {

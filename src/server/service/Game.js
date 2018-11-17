@@ -1,16 +1,14 @@
 /*
     INFO:
-    This file is inspired by The Web And API design lecture 11.
+    This file is inspired by The Web And API design lecture 11, but extended for more functionality and to work with quizzes.
  */
 
-const Quiz = require("../model/Quiz");
 const crypto = require("crypto");
 const ActivePlayers = require("./ActivePlayers");
-const GameState = require("../../shared/GameState");
+const GameState = require("./GameState");
 const User = require("../model/User");
 
 class Game {
-
 
   constructor(playerIds, callbackWhenFinished, quizzes, category){
 
@@ -50,7 +48,6 @@ class Game {
 
   }
 
-
   randomId(){
     return crypto.randomBytes(10).toString('hex');
   }
@@ -70,26 +67,8 @@ class Game {
   }
 
   registerListener(playerId) {
-    /*
-            The users will send messages on the WS each time they make a move.
-            So, we need to register a listener on the event "insertion" for
-            the sockets associated to the 2 players
-         */
-
     const socket = this.sockets.get(playerId);
 
-    /*
-        A player could play many matches, in sequence, on the same socket.
-        Once a match is over, we should not read any further message for it.
-        A user should be able to play only 1 match at a time.
-        At each new match, we need to register a new handler for the
-        "insertion" event, bound to the current match.
-        But you need to be careful: "socket.on" does NOT replace the current
-        handler, but rather add a new one.
-        For the same event, you can have many handlers active at the same time.
-        So, to avoid problems, we just delete all existing handlers when a new
-        match is started, as anyway a user can play only 1 match at a time.
-     */
     socket.removeAllListeners('insertion');
 
     socket.on('insertion', data => {
@@ -110,11 +89,6 @@ class Game {
         + " in match " + this.gameId);
 
       const expectedQuestionId = this.gameState.questionDto.questionId.toString();
-
-      /*
-          We start with some input validation, eg checking if the received
-          message was really meant for this ongoing match.
-       */
 
       if(questionId !== expectedQuestionId){
         socket.emit("update", {error: "Illegal answer for this quiz!"});

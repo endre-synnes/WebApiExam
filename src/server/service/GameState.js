@@ -1,5 +1,4 @@
 
-//TODO make use of constructor and implement it to hold state
 class GameState {
 
   constructor(players, questionDto){

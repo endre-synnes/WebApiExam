@@ -1,6 +1,6 @@
 /*
     INFO:
-    This file is inspired by The Web And API design lecture 11.
+    This file is inspired by The Web And API design lecture 11, but extended for more functionality.
  */
 
 const socketIo = require('socket.io');
@@ -15,7 +15,6 @@ const start = (server) => {
 
     console.log("setting up web sockets");
 
-    //start a WebSocket server besides the REST API from Express
     io = socketIo(server);
 
     io.on('connection', function(socket){

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import requireAuth from "./../requireAuth";
-var ReactBsTable  = require('react-bootstrap-table');
-var BootstrapTable = ReactBsTable.BootstrapTable;
-var TableHeaderColumn = ReactBsTable.TableHeaderColumn;
+
+const ReactBsTable = require('react-bootstrap-table');
+const BootstrapTable = ReactBsTable.BootstrapTable;
+const TableHeaderColumn = ReactBsTable.TableHeaderColumn;
 
 class LeaderBoard extends Component {
 

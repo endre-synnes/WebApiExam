@@ -1,7 +1,5 @@
 import React, {Component} from "react";
 import requireAuth from "./../requireAuth";
-import { connect } from 'react-redux';
-import {getWsToken} from "../../actions"
 import openSocket from 'socket.io-client';
 import {Link} from "react-router-dom";
 import Countdown from "react-countdown-now";
@@ -50,10 +48,6 @@ class Lobby extends Component {
       }
 
       const data = dto.data;
-
-      console.log("data from update:");
-      console.log(data);
-
       this.setState({
         quizAnswered: false,
         gameId: data.gameId,
@@ -144,7 +138,6 @@ class Lobby extends Component {
     }
 
     const payload = await response.json();
-    console.log(payload);
     this.setState({isOrganizer: payload.isOrganizer});
   }
 
@@ -299,11 +292,4 @@ class Lobby extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    wstoken: state.auth.wstoken,
-    errorMessage: state.auth.errorMessage
-  };
-}
-
-export default connect(mapStateToProps, {getWsToken})(requireAuth(Lobby));
+export default requireAuth(Lobby);

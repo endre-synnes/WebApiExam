@@ -1,6 +1,6 @@
 /*
     INFO:
-    This file is inspired by The Web And API design lecture 11.
+    This file is inspired by The Web And API design lecture 11, but extended for more functionality.
  */
 
 const Game = require('../service/Game');
@@ -16,7 +16,6 @@ const userIdToGame = new Map();
     Map from match id to ongoing match
  */
 const gameIdToGame = new Map();
-
 
 function startMatch(playerIds){
 
@@ -43,8 +42,6 @@ function startMatch(playerIds){
     }
 
   );
-
-
 }
 
 function getRandomQuizNumber(max) {
@@ -69,11 +66,6 @@ function forfeit(userId){
   }
 
   userIdToGame.delete(userId);
-
-  //game.playerIds.forEach(id => userIdToGame.delete(id));
-  //gameIdToGame.delete(game.gameId);
-
-  //game.sendForfeit(userId);
 }
 
 
