@@ -12,17 +12,19 @@ First of all, make sure you have internet connectivity.
 
 2. In a terminal, navigate to the root directory of this project.
 
-3. run the following command: `docker-compose up -d`
+3. Run: `npm install`
+
+4. run the following command: `docker-compose up -d`
     Now docker will run the setup of this project and install dependencies,
     as well as create the necessary docker images and start docker containers serving this application. 
     Note: If are running windows you may have to restart Docker and run `docker-compose up -d` [again](https://github.com/docker/for-win/issues/573#issuecomment-301513210) 
     due to a [bug](https://github.com/docker/for-win/issues/573) in the monggoDB container image.
 
-4. After docker is finished with the setup, the application will be accessible at: `localhost:8080`. 
+5. After docker is finished with the setup, the application will be accessible at: `localhost:8080`. 
     There is no default users so you need to sign up before you can start a game. 
     And sign up with a player two on a second web browser to be able to start a game. 
 
-5. To stop the application, you can run the following command: `docker-compose down`, or to also clean all docker containers and images: 
+6. To stop the application, you can run the following command: `docker-compose down`, or to also clean all docker containers and images: 
     `docker-compose -f docker-compose.yml down --rmi all`.
 
 #### Heroku 
