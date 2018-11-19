@@ -21,19 +21,20 @@ First of all, make sure you have internet connectivity.
 4. After docker is finished with the setup, the application will be accessible at: `localhost:8080`. 
     There is no default users so you need to sign up before you can start a game. 
     And sign up with a player two on a second web browser to be able to start a game. 
-    There are three default users created that you can use if you want, or create your own by clikking `sign up`:
-    
-    | Username      | Password      |
-    |:-------------:|:-------------:|
-    | mee           | mee           |
-    | you           | you           |
-    | wee           | wee           |
 
 5. To stop the application, you can run the following command: `docker-compose down`, or to also clean all docker containers and images: 
     `docker-compose -f docker-compose.yml down --rmi all`.
 
 #### Heroku 
 The application is already running on [Heroku](https://afternoon-everglades-27665.herokuapp.com).
+
+There is three default users created that you can use if you want, or create your own by clicking `sign up`:
+    
+    | Username      | Password      |
+    |:-------------:|:-------------:|
+    | mee           | mee           |
+    | you           | you           |
+    | wee           | wee           |
 
 Keep in mind that Heroku servers tend to go in a hibernate state after 30 minutes of inactivity.
 So be patient the first time you load this page.
@@ -46,28 +47,28 @@ The first player to join a queue becomes the organizer for that game.
 When there are more than 2 players in the queue (including the organizer),
 the game can start by the organizer hitting "start Game".
 
-Web sockets are used to transmit questions and other events where websockets
+Web sockets are used to transmit questions and other live events where that
 can be useful. Like when there are enough players to start the game.
 
 In the case of that the organizer should leave the queue, everyone in that queue get notified
 and can choose to start a new game (queue to a new game) or exit to the main page.
 
 Also, if some users leave the queue and there are too fev players left to start a game,
-the organizer gets notified.
+the organizer gets notified and can´t click to start the game.
 
 The score is based on player response time. Meaning the faster you are to answer a question,
 the more points you get. You have 10 seconds to answer each question and a theoretical max score
-of 1000 points per question. After  a player has made a guess, the times goes away until the next 
+of 1000 points per question. After a player has made a guess, the timer goes away until the next 
 question is available.
 
 I have also implemented a leader board where all players are listed with username and total number of wins.
-This is sorted descending, with the player with the moat wins on top.
+This is sorted descending, with the player with the most wins on top.
 
 As a security feature I have also encrypted all the users passwords using the bcryp library
 
 As a bonus I have also used a middleware on all components that should require authentication.
 The file is called [requireAuth.js](./src/client/components/requireAuth.js). 
-This file helps ensure that an user is in fact authentication, by calling the API on `componentDidMount`. 
+This file helps ensure that an user is in fact authentication, by calling the API on `componentDidMount` for each of the secured react components. 
 If the response is 401 you will not be able to view the component on this route and get redirected to the home page.
 
 #### Achieved bonus implementations
