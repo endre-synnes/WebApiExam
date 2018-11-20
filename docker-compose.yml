@@ -9,7 +9,7 @@ services:
       - "27017:27017"
 
   frontend:
-    image: synend/webserver
+    image: quiz/webserver
     container_name: "api_app"
     build:
       context: .

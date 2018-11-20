@@ -12,7 +12,7 @@
     "start": "NODE_ENV=dev node src/server/server.js",
     "prod": "NODE_ENV=prod node src/server/server.js"
   },
-  "author": "Endre Synnes",
+  "author": "Candidate",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.3",
