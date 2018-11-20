@@ -43,6 +43,14 @@ So be patient the first time you load this page.
 
 <br/>
 
+#### View the application in action
+
+These two videos displays this application in use:
+
+- [Locally using Docker](https://youtu.be/kAVZVOWlcok)
+- [Online on Heroku](https://youtu.be/v9IeCHmjHuM)
+
+
 ## Overview
 This is an online quiz game. Each player plays against each other.
 The first player to join a queue becomes the organizer for that game.
